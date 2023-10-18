@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "493418907146",
+    "project_id": "database-ede31",
+    "storage_bucket": "database-ede31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493418907146:android:c909a7fe8b4a7419c181f3",
+        "android_client_info": {
+          "package_name": "com.example.finalyear"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh12uQ-Ko6nv5QdsgtLbCCLTMzFppuqTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
