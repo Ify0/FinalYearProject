@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f2f1f6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="118dp"
+                android:background="#7C6980">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="Menu"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.505" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Amy Smith"
+                android:textAlignment="center"
+                android:textColor="#7C6980"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="339dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="33dp">
+
+                <ImageView
+                    android:id="@+id/pic1"
+                    android:layout_width="58dp"
+                    android:layout_height="42dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.642"
+                    app:srcCompat="@drawable/btn_5" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="215dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="1dp"
+                    android:text="Skin Reader Tool"
+                    android:textColor="#7C6980"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/pic1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.692" />
+
+                <ImageButton
+                    android:id="@+id/skinReader"
+                    android:layout_width="66dp"
+                    android:layout_height="68dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="Entering the skin reader tool"
+                    android:src="@drawable/arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="339dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="33dp">
+
+                <ImageView
+                    android:id="@+id/pic2"
+                    android:layout_width="58dp"
+                    android:layout_height="42dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.571"
+                    app:srcCompat="@drawable/write" />
+
+                <TextView
+                    android:id="@+id/text2"
+                    android:layout_width="215dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="1dp"
+                    android:text="Search a Product"
+                    android:textColor="#7C6980"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/pic2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.615" />
+
+                <ImageButton
+                    android:id="@+id/searchProduct"
+                    android:layout_width="68dp"
+                    android:layout_height="74dp"
+                    android:contentDescription="Search a product"
+                    android:src="@drawable/arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="339dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="33dp">
+
+                <ImageView
+                    android:id="@+id/pic3"
+                    android:layout_width="58dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.642"
+                    app:srcCompat="@drawable/btn_3" />
+
+                <TextView
+                    android:id="@+id/text4"
+                    android:layout_width="215dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="8dp"
+                    android:text="Scan a Product"
+                    android:textColor="#7C6980"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/pic3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.615" />
+
+                <ImageButton
+                    android:id="@+id/scanProduct"
+                    android:layout_width="70dp"
+                    android:layout_height="68dp"
+                    android:contentDescription="Scan a Product"
+                    android:src="@drawable/arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="339dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="33dp">
+
+                <ImageView
+                    android:id="@+id/pic5"
+                    android:layout_width="58dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.642"
+                    app:srcCompat="@drawable/btn_4" />
+
+                <TextView
+                    android:id="@+id/text5"
+                    android:layout_width="215dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="8dp"
+                    android:text="History "
+                    android:textColor="#7C6980"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/pic5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.615" />
+
+                <ImageButton
+                    android:id="@+id/history"
+                    android:layout_width="73dp"
+                    android:layout_height="72dp"
+                    android:contentDescription="History"
+                    android:src="@drawable/arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="339dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="33dp">
+
+                <ImageButton
+                    android:id="@+id/logout"
+                    android:layout_width="71dp"
+                    android:layout_height="76dp"
+                    android:contentDescription="Scan a Product"
+                    android:src="@drawable/arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="58dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.642"
+                    app:srcCompat="@drawable/btn_6" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="215dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="16dp"
+                    android:text="Logout"
+                    android:textColor="#7C6980"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.615" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
