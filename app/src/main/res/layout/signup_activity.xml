@@ -47,37 +47,6 @@
             android:layout_marginEnd="32dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/nametext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/edittext_background"
-                    android:ems="10"
-                    android:hint="Enter name"
-                    android:inputType="text"
-                    android:paddingLeft="10dp"
-                    android:textColorHint="#f5f5f5"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,8 +62,11 @@
                     android:text="Email"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -107,6 +79,7 @@
                     android:paddingLeft="10dp"
                     android:textColorHint="#f5f5f5"
                     android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -125,7 +98,11 @@
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password1"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -138,6 +115,7 @@
                     android:paddingLeft="10dp"
                     android:textColorHint="#f5f5f5"
                     android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -156,7 +134,11 @@
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password2"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -169,6 +151,7 @@
                     android:paddingLeft="10dp"
                     android:textColorHint="#f5f5f5"
                     android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/button"

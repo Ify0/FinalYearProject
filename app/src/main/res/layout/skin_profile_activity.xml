@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="118dp"
+        android:background="#7C6980"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="Skin Profile"
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView3"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="66dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose your skin type:"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/rb_oily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oily" />
+
+        <RadioButton
+            android:id="@+id/rb_dry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dry" />
+
+        <RadioButton
+            android:id="@+id/rb_combination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Combination" />
+
+        <RadioButton
+            android:id="@+id/rb_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Normal Skin" />
+
+    </RadioGroup>
+
+
+    <Spinner
+
+
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroup"
+        android:layout_marginTop="59dp"
+        android:entries="@array/priority_array"
+        android:minHeight="48dp"
+        android:prompt="@string/priority_prompt" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="57dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price Range:"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/rb_range1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 - 30" />
+
+        <RadioButton
+            android:id="@+id/rb_range2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 - 50" />
+
+        <RadioButton
+            android:id="@+id/rb_range3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="50 - 100" />
+
+    </RadioGroup>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="78dp"
+        android:layout_height="61dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="45dp"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/arrow" />
+
+
+</RelativeLayout>

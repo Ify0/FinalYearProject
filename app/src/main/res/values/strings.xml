@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FinalYear</string>
+    <string name="priority_prompt">Main Priority:</string>
+    <string-array name="priority_array">
+        <item>Wrinkles</item>
+        <item>Fine Lines</item>
+        <item>Hyperpigmentation</item>
+        <item>Pimples</item>
+        <item>Dark Circles</item>
+        <item>Enlarged Pores</item>
+    </string-array>
 </resources>
