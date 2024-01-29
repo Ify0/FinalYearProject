@@ -11,6 +11,8 @@ public class Report {
     private boolean dry;
     private boolean enlargedPores;
     private boolean fineLines;
+
+    private boolean wrinkles;
     private boolean hyperpigmentation;
     private boolean normalSkin;
     private boolean oily;
