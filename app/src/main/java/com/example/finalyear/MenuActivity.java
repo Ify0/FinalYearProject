@@ -27,6 +27,24 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton search = findViewById(R.id.searchProduct);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, searchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageButton scan = findViewById(R.id.scanProduct);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, ScannerActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         ImageButton logout = findViewById(R.id.logout);

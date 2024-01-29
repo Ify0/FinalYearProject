@@ -1,6 +1,10 @@
 package com.example.finalyear;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +23,7 @@ public class ResultsActivity extends AppCompatActivity {
     private ImageView resultImageView;
     private TextView mainPriorityValueTextView;
     private TextView selectionMainPriorityValueTextView;
-
+    private Button discoverButton;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
     private FirebaseStorage storage;
@@ -29,6 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_activity);
 
+        discoverButton = findViewById(R.id.discoverButton);
         resultImageView = findViewById(R.id.resultImageView);
         mainPriorityValueTextView = findViewById(R.id.mainPriorityValueTextView);
         selectionMainPriorityValueTextView = findViewById(R.id.selectionMainPriorityValueTextView);
@@ -42,6 +47,14 @@ public class ResultsActivity extends AppCompatActivity {
             retrieveAnalysisResult();
             retrieveMainPriorityValue();
         }
+
+        discoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ResultsActivity.this, RoutineActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void retrieveImage() {
