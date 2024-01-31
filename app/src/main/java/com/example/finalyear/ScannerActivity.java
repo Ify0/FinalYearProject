@@ -81,22 +81,16 @@ public class ScannerActivity extends AppCompatActivity {
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkCameraPermission()) {
-                    pickImageCamera();
-                } else {
-                    requestCameraPermission();
-                }
+                pickImageCamera();
             }
+
         });
 
         galleryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkCameraPermission()) {
                     pickImageGallery();
-                } else {
-                    requestCameraPermission();
-                }
+
             }
         });
 
@@ -212,7 +206,7 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void pickImageGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
         intent.setType("image/*");
         galleryActivityResultLauncher.launch(intent);
@@ -273,13 +267,15 @@ public class ScannerActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
     }
 
-    private boolean checkCameraPermission() {
+  /*  private boolean checkCameraPermission() {
         boolean resultCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED;
         boolean resultsStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED;
         return resultCamera && resultsStorage;
     }
+    *
+   */
 
     private void requestCameraPermission() {
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
