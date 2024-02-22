@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     private ImageView resultImageView;
     private TextView mainPriorityValueTextView;
+    private TextView likelyTextView;
     private TextView selectionMainPriorityValueTextView;
     private Button discoverButton;
     private FirebaseFirestore db;
@@ -36,6 +36,7 @@ public class ResultsActivity extends AppCompatActivity {
         discoverButton = findViewById(R.id.discoverButton);
         resultImageView = findViewById(R.id.resultImageView);
         mainPriorityValueTextView = findViewById(R.id.mainPriorityValueTextView);
+        likelyTextView = findViewById(R.id.likelyTextView);
         selectionMainPriorityValueTextView = findViewById(R.id.selectionMainPriorityValueTextView);
 
         db = FirebaseFirestore.getInstance();
@@ -93,7 +94,6 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-
     private void retrieveAnalysisResult() {
         // Firestore reference for the user's analysis result
         db.collection("Users")
@@ -106,9 +106,10 @@ public class ResultsActivity extends AppCompatActivity {
                             String analysisResult = document.getString("analysisResult");
                             // Extract the predicted class value
                             String predictedClass = extractPredictedClass(analysisResult);
-
+                            String confidence = extractConfidenceClass(analysisResult);
                             // Update UI element
                             mainPriorityValueTextView.setText(predictedClass);
+                            likelyTextView.setText(confidence);
 
                             // Assuming there's only one analysis result, break after the first iteration
                             break;
@@ -137,6 +138,7 @@ public class ResultsActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private String extractPredictedClass(String analysisResult) {
         // Extracting the predicted class value from the analysis result string
         // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
@@ -146,5 +148,34 @@ public class ResultsActivity extends AppCompatActivity {
         }
         return "";
     }
-}
+    private String extractConfidenceClass(String analysisResult) {
+        // Extracting the predicted class value from the analysis result string
+        // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
+        String[] parts = analysisResult.split("Confidence: ");
+        if (parts.length > 1) {
+            String predictedValueStr = parts[1].split(",")[0].trim();
 
+            try {
+                double predictedValue = Double.parseDouble(predictedValueStr);
+
+                if (predictedValue > 0.70) {
+                    return "Certain";
+                } else if (predictedValue > 0.40) {
+                    return "Highly Likely";
+                } else if (predictedValue > 0.0) {
+                    return "Likely";
+                } else {
+                    // Add any additional conditions as needed
+                    return "Unknown";
+                }
+            } catch (NumberFormatException e) {
+                // Handle non-numeric values, e.g., "hyperpigmentation"
+                return "Unknown";
+            }
+        }
+        return "";
+    }
+
+
+
+}
