@@ -1,15 +1,18 @@
 package com.example.finalyear;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -29,14 +32,17 @@ import java.net.URL;
 
 public class ImageScanner extends AppCompatActivity {
 
+    private static final String TAG = "ImageScanner";
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
     private ImageView imageView;
 
+    private LinearLayout loadingLayout;
     private FirebaseFirestore firestore;
     private CollectionReference uploadsRef;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private AlertDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +75,32 @@ public class ImageScanner extends AppCompatActivity {
             }
         });
 
+        loadingLayout = findViewById(R.id.loadingLayout);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Perform image analysis and save result to the database
+                showLoadingLayout();
                 analyzeAndSaveToDatabase();
-                Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
-                startActivity(intent);
+               Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
+               startActivity(intent);
+
             }
         });
+    }
+    private void showLoadingLayout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+
+        loadingDialog = builder.create();
+        loadingDialog.show();
+    }
+
+    private void hideLoadingLayout() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 
     private void openFileChooser() {
@@ -146,6 +169,8 @@ public class ImageScanner extends AppCompatActivity {
             super.onPostExecute(result);
             // This method will be called after doInBackground completes
             // Now, you have already saved the result to the database in onAnalysisSuccess/onAnalysisFailure
+            hideLoadingLayout(); // Add this line to hide loading layout after analysis
+
         }
     }
 
@@ -181,13 +206,13 @@ public class ImageScanner extends AppCompatActivity {
             Upload upload = new Upload(imageUrl, result);
             uploadsRef.add(upload)
                     .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(ImageScanner.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Upload successful");
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(ImageScanner.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Upload failed: " + e.getMessage());
                     });
         } else {
-            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "User not authenticated");
         }
     }
 

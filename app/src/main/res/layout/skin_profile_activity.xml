@@ -119,5 +119,6 @@
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/arrow" />
 
-
+    <include layout="@layout/progress_layout"
+        android:visibility="gone" />
 </RelativeLayout>
