@@ -1,11 +1,16 @@
 package com.example.finalyear;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -14,10 +19,29 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.Manifest;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.common.util.concurrent.ListenableFuture;
+import androidx.camera.core.CameraSelector;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,11 +51,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 public class ImageScanner extends AppCompatActivity {
-
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private static final String TAG = "ImageScanner";
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
@@ -44,10 +74,15 @@ public class ImageScanner extends AppCompatActivity {
     private StorageReference storageReference;
     private AlertDialog loadingDialog;
 
+    //private PreviewView previewView;
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+    private ImageCapture imageCapture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_image_activity);
+
 
         // Initialize Firebase
         firestore = FirebaseFirestore.getInstance();
@@ -59,7 +94,9 @@ public class ImageScanner extends AppCompatActivity {
         // Initialize views
         imageView = findViewById(R.id.imageView);
         Button uploadButton = findViewById(R.id.uploadButton);
-        ImageButton nextButton = findViewById(R.id.imageButton4);
+        MaterialButton nextButton = findViewById(R.id.imageButton4);
+        Button useCameraButton = findViewById(R.id.cameraBtn);
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
 
         // Inside onCreate
@@ -67,11 +104,17 @@ public class ImageScanner extends AppCompatActivity {
         storageReference = storage.getReference("uploads"); // "uploads" is the name of your storage folder
 
 
+
         // Set click listeners
-        uploadButton.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(view -> openFileChooser());
+
+
+
+        useCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFileChooser();
+                //startCamera();
+                checkCameraPermissionAndOpenCamera();
             }
         });
 
@@ -87,7 +130,99 @@ public class ImageScanner extends AppCompatActivity {
 
             }
         });
+
     }
+    private void checkCameraPermissionAndOpenCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+           // startCamera();
+            pickImageCamera();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void pickImageCamera() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.TITLE, "Sample Title");
+        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Sample Image Description");
+
+        imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        cameraActivityResultLauncher.launch(intent);
+    }
+
+    private final ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    if (o.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = o.getData();
+                        Log.d(TAG, "onActivityResult: imageUri" + imageUri);
+                        // Handle the captured image URI as needed (e.g., display in an ImageView)
+                        imageView.setImageURI(imageUri);
+                    } else {
+                        Toast.makeText(ImageScanner.this, "Cancelled...", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+    );
+
+    private void startCamera() {
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindCameraUseCases(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                // Handle exceptions
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+    private void bindCameraUseCases(ProcessCameraProvider cameraProvider) {
+        // Set up preview
+        Preview preview = new Preview.Builder().build();
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                .build();
+
+        //preview.setSurfaceProvider(imageView.getSurfaceProvider());
+
+
+        // Set up image capture
+        imageCapture = new ImageCapture.Builder().build();
+
+        // Unbind use cases before rebinding
+        cameraProvider.unbindAll();
+
+        // Bind use cases to camera
+        Camera camera = cameraProvider.bindToLifecycle(
+                this,
+                cameraSelector,
+                preview,
+                imageCapture
+        );
+
+        // Set up image capture listener
+    }
+
     private void showLoadingLayout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -102,6 +237,7 @@ public class ImageScanner extends AppCompatActivity {
             loadingDialog.dismiss();
         }
     }
+
 
     private void openFileChooser() {
         Intent intent = new Intent();
