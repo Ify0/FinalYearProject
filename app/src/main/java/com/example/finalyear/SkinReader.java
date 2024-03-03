@@ -1,10 +1,13 @@
 package com.example.finalyear;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,13 +29,15 @@ import java.util.Map;
 
 public class SkinReader extends AppCompatActivity {
 
+    private static final String TAG = "SkinReader";
     private RadioGroup skinTypeRadioGroup;
     private Spinner prioritySpinner;
     private RadioGroup priceRangeRadioGroup;
     private ImageButton saveButton;
-
+    private AlertDialog loadingDialog;
     private FirebaseFirestore firestore;
 
+    private LinearLayout progressLayout;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +59,35 @@ public class SkinReader extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         prioritySpinner.setAdapter(adapter);
 
+        progressLayout = findViewById(R.id.loadingLayout);
+
         // Set up button click listener
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showLoadingLayout();
                 saveDataToFirestore();
                 Intent intent = new Intent(SkinReader.this, ImageScanner.class);
                 startActivity(intent);
+
             }
         });
     }
 
+    private void showLoadingLayout() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+
+        loadingDialog = builder.create();
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
     private void saveDataToFirestore() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -97,9 +120,11 @@ public class SkinReader extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(SkinReader.this, "Data saved successfully", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Data saved successfully ");
+                            hideLoadingDialog(); // Add this line to hide the loading dialog after saving data
                         } else {
-                            Toast.makeText(SkinReader.this, "Failed to save data", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Failed to save data");
+                            hideLoadingDialog(); // Ensure the loading dialog is hidden even in case of failure
                         }
                     }
                 });

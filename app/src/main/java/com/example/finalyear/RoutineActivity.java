@@ -65,7 +65,7 @@ public class RoutineActivity extends AppCompatActivity {
             // User is signed in
             // Retrieve user preferences from Firestore
             retrieveUserPreferencesFromFirestore();
-            retrieveAnalysisResult();
+           // retrieveAnalysisResult();
         } else {
             // User is not signed in, handle accordingly
             Log.d("Firestore", "User is not signed in.");
@@ -120,6 +120,7 @@ public class RoutineActivity extends AppCompatActivity {
                                 handleUserSkinType(userPreferences);
                                 if (userPreferences != null) {
                                     handleUserPreferences(userPreferences);
+                                    retrieveAnalysisResult();
                                 }
                             } else {
                                 Log.d("Firestore", "No document found in the 'Report' collection for the user.");
