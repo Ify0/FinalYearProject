@@ -8,17 +8,20 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
 
+    CardView skinReader , search , scan , logout , favourite ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity); // Replace with your layout file
 
-        ImageButton skinReader = findViewById(R.id.skinReader);
+
+        skinReader = findViewById(R.id.skinReader);
         skinReader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +30,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton search = findViewById(R.id.searchProduct);
+         search = findViewById(R.id.searchProduct);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +39,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton scan = findViewById(R.id.scanProduct);
+       scan = findViewById(R.id.scanProduct);
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
 
-        ImageButton logout = findViewById(R.id.logout);
+        logout = findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,5 +58,16 @@ public class MenuActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        favourite = findViewById(R.id.favourites);
+
+        favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
