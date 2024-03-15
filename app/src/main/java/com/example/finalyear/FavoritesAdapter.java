@@ -1,15 +1,18 @@
 package com.example.finalyear;
 
+// FavoritesAdapter.java
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,78 +20,63 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<myViewHolder> {
+public class FavoritesAdapter extends RecyclerView.Adapter<FavouriteViewHolder> {
+
     private final Context context;
-    private List<SkincareProduct> dataList;
+    private List<SkincareProduct> favoritesList;
+
     private FirebaseFirestore db;
 
     private FirebaseUser currentUser;
 
-    public MyAdapter(Context context, List<SkincareProduct> dataList) {
+
+
+
+    public FavoritesAdapter(Context context, List<SkincareProduct> favoritesList) {
         this.context = context;
-        this.dataList = dataList;
+        this.favoritesList = favoritesList;
         this.db = FirebaseFirestore.getInstance();
     }
 
+    @NonNull
     @Override
-    public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item, parent, false);
-        return new myViewHolder(view);
+    public FavouriteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_item, parent, false);
+        return new FavouriteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(myViewHolder holder, int position) {
-        holder.recTitle.setText(dataList.get(position).getProduct_name());
-        holder.recDesc.setText(dataList.get(position).getBrand());
+    public void onBindViewHolder(@NonNull FavouriteViewHolder holder, int position) {
+        //SkincareProduct product = favoritesList.get(position);
+        holder.productName.setText(favoritesList.get(position).getProduct_name());
+        holder.BrandName.setText(favoritesList.get(position).getBrand());
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        holder.recCard.setOnClickListener(new View.OnClickListener() {
+        // Add more views and data binding as needed
+        holder.Card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = holder.getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     Intent intent = new Intent(context, ActivityDetail.class);
-                    intent.putExtra("Product Name", dataList.get(pos).getProduct_name());
-                    intent.putExtra("Brand", dataList.get(pos).getBrand());
-                    intent.putExtra("Ingredients", dataList.get(pos).getIngredients());
+                    intent.putExtra("Product Name", favoritesList.get(pos).getProduct_name());
+                    intent.putExtra("Brand", favoritesList.get(pos).getBrand());
+                    intent.putExtra("Ingredients", favoritesList.get(pos).getIngredients());
                     // Convert List<String> to String array
-                    String[] parsedExtraArray = dataList.get(pos).get__parsed_extra().toArray(new String[0]);
+                    String[] parsedExtraArray = favoritesList.get(pos).get__parsed_extra().toArray(new String[0]);
                     intent.putExtra("Parsed Extra", parsedExtraArray);
                     context.startActivity(intent);
                 }
             }
         });
-
-        holder.favoriteCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int pos = holder.getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION) {
-                    SkincareProduct selectedProduct = dataList.get(pos);
-
-                    // Perform actions when the favorite status changes
-                    if (isChecked) {
-                        // Add the product to Firebase or your favorites list
-                        // You might want to create a method to handle Firebase operations
-                        addToFavorites(selectedProduct);
-                    } else {
-                        // Remove the product from Firebase or your favorites list
-                        // You might want to create a method to handle Firebase operations
-                        removeFromFavorites(selectedProduct);
-                    }
-                }
-            }
-        });
-
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return favoritesList.size();
     }
 
     public void searchDataList(List<SkincareProduct> searchList) {
-        dataList = searchList;
+        favoritesList = searchList;
         notifyDataSetChanged();
     }
 
@@ -128,4 +116,16 @@ public class MyAdapter extends RecyclerView.Adapter<myViewHolder> {
                     }
                 });
     }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvProductName;
+        // Add more views as needed
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvProductName = itemView.findViewById(R.id.recTitle);
+            // Initialize more views as needed
+        }
+
+    }
 }
+

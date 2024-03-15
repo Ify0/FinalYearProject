@@ -43,7 +43,9 @@ public class TreatmentAdapter extends RecyclerView.Adapter<TreatmentAdapter.Trea
     public void setTreatmentList(List<Product> treatmentList) {
         this.treatmentList = treatmentList;
     }
-
+    public List<Product> getTreatmentList() {
+        return treatmentList;
+    }
     public static class TreatmentViewHolder extends RecyclerView.ViewHolder {
         TextView productNameTextView;
         TextView productPriceTextView;

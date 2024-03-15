@@ -41,6 +41,11 @@ public class CleanserAdapter extends RecyclerView.Adapter<CleanserAdapter.Cleans
     public void setCleanserList(List<Product> cleanserList) {
         this.cleanserList = cleanserList;
     }
+
+    public List<Product> getCleanserList() {
+        return cleanserList;
+    }
+
     public static class CleanserViewHolder extends RecyclerView.ViewHolder {
         TextView productNameTextView;
         TextView productPriceTextView;

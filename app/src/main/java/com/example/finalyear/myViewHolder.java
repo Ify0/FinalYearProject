@@ -1,6 +1,7 @@
 package com.example.finalyear;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,7 @@ public class myViewHolder extends RecyclerView.ViewHolder {
     public TextView recTitle;
     public TextView recDesc;
     public CardView recCard;
+    public CheckBox favoriteCheckBox;
 
     public myViewHolder(View itemView) {
         super(itemView);
@@ -19,5 +21,6 @@ public class myViewHolder extends RecyclerView.ViewHolder {
         recTitle = itemView.findViewById(R.id.recTitle);
         recDesc = itemView.findViewById(R.id.recDesc);
         recCard = itemView.findViewById(R.id.recCard);
+        favoriteCheckBox = itemView.findViewById(R.id.favouritescheckBox);
     }
 }

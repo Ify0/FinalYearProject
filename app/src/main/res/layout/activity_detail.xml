@@ -20,12 +20,20 @@
 
     <ImageView
         android:id="@+id/detailImage"
-        android:layout_width="358dp"
-        android:layout_height="220dp"
+        android:layout_width="278dp"
+        android:layout_height="167dp"
         android:layout_gravity="center"
         android:padding="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/btn_4" />
+
+    <CheckBox
+        android:id="@+id/favourite"
+        android:layout_width="394dp"
+        android:layout_height="wrap_content"
+        android:button="@drawable/favorites"
+        android:text=" Add to Favouturites "
+        android:textColor="@color/lavender" />
 
     <TextView
         android:layout_width="match_parent"

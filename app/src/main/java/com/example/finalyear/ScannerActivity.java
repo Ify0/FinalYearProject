@@ -114,6 +114,18 @@ public class ScannerActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(List<Barcode> barcodes) {
                             extractBarCodeQRCodeInfo(barcodes);
+
+                            // Assuming rawValue contains the barcode string
+                            String barcode = barcodes.get(0).getRawValue();
+
+                            // Use ProductInfoRetriever to get additional product information
+                            ProductInfoRetriever productInfoRetriever = new ProductInfoRetriever(ScannerActivity.this);
+                            productInfoRetriever.setOnProductInfoReceivedListener((productName, ingredients) -> {
+                                // Handle the received product information (e.g., display it in UI)
+                                Log.d(TAG, "Product Name: " + productName);
+                                Log.d(TAG, "Ingredients: " + ingredients);
+                            });
+                            productInfoRetriever.execute(barcode);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
