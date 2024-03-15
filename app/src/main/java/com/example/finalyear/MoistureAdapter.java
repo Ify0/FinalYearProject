@@ -42,6 +42,9 @@ public class MoistureAdapter extends RecyclerView.Adapter<MoistureAdapter.Moistu
     public void setMoistureList(List<Product> moistureList) {
         this.moistureList = moistureList;
     }
+    public List<Product> getMoistureList() {
+        return moistureList;
+    }
     public static class MoistureViewHolder extends RecyclerView.ViewHolder {
         TextView productNameTextView;
         TextView productPriceTextView;

@@ -98,7 +98,7 @@ public class RoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle the button click event
-              //  showEmailDialog();
+                showEmailDialog();
             }
         });
     }
@@ -714,6 +714,42 @@ public class RoutineActivity extends AppCompatActivity {
  //      }
  //  }
 
+    private void showEmailDialog() {
+        String subject = "Skincare Routine for " + currentUser.getEmail();
+        String body = getSkincareRoutineEmailBody();
 
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+        startActivity(Intent.createChooser(shareIntent, "Share with:"));
+    }
+
+    private String getSkincareRoutineEmailBody() {
+        StringBuilder body = new StringBuilder();
+
+        // Add Cleanser information to the email body
+        body.append("Cleanser:\n");
+        List<Product> cleanserProducts = cleanserAdapter.getCleanserList();
+        addProductInformationToEmailBody(cleanserProducts, body);
+
+        // Add Treatment information to the email body
+        body.append("\n\nTreatment:\n");
+        List<Product> treatmentProducts = treatmentAdapter.getTreatmentList();
+        addProductInformationToEmailBody(treatmentProducts, body);
+
+        // Add Moisturizer information to the email body
+        body.append("\n\nMoisturiser:\n");
+        List<Product> moistureProducts = moistureAdapter.getMoistureList();
+        addProductInformationToEmailBody(moistureProducts, body);
+
+        return body.toString();
+    }
+
+    private void addProductInformationToEmailBody(List<Product> products, StringBuilder body) {
+        for (Product product : products) {
+            body.append("- ").append(product.getName()).append(": $").append(product.getPrice()).append("\n");
+        }
+    }
 }
 
