@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
 
-    CardView skinReader , search , scan , logout , favourite ;
+    CardView skinReader , search , scan , logout , favourite , tracker ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +65,16 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tracker = findViewById(R.id.tracking);
+
+        tracker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, TrackerActivity.class);
                 startActivity(intent);
             }
         });

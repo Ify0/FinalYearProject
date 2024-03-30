@@ -4,6 +4,8 @@ plugins {
     //id("com.google.gms.google-services") version "4.4.0" apply false
 }
 
+
+
 android {
     namespace = "com.example.finalyear"
     compileSdk = 34
@@ -32,6 +34,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
 }
 
 dependencies {
@@ -54,6 +61,8 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.1")
     implementation("androidx.camera:camera-lifecycle:1.3.1-alpha01")
     implementation("androidx.camera:camera-camera2:1.3.1-alpha01")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.sun.mail:android-mail:1.6.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

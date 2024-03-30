@@ -30,9 +30,13 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
+
+
         recyclerViewFavorites = findViewById(R.id.recyclerViewFavorites);
         favoritesList = new ArrayList<>();
         favoritesAdapter = new FavoritesAdapter(this, favoritesList);
+
+
         recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFavorites.setAdapter(favoritesAdapter);
 

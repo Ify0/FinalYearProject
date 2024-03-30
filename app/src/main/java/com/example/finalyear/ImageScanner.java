@@ -43,9 +43,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -265,9 +267,11 @@ public class ImageScanner extends AppCompatActivity {
     public class ImageAnalysisTask extends AsyncTask<Void, Void, String> {
 
         private final Uri uri;
+        private final Timestamp timestamp;
 
-        public ImageAnalysisTask(Uri uri) {
+        public ImageAnalysisTask(Uri uri , Timestamp timestamp) {
             this.uri = uri;
+            this.timestamp = timestamp;
         }
 
         @Override
@@ -285,14 +289,14 @@ public class ImageScanner extends AppCompatActivity {
                 public void onAnalysisSuccess(String imageUrl, String result) {
                     // Handle the success result if needed
                     // Now, you can save the result to the database
-                    saveToFirebase(imageUrl, result);
+                    saveToFirebase(imageUrl, result , timestamp);
                 }
 
                 @Override
                 public void onAnalysisFailure(String imageUrl, String errorMessage) {
                     // Handle the failure result if needed
                     // Now, you can save the failure message to the database
-                    saveToFirebase(imageUrl, errorMessage);
+                    saveToFirebase(imageUrl, errorMessage ,  timestamp);
                 }
             });
 
@@ -325,7 +329,14 @@ public class ImageScanner extends AppCompatActivity {
                         // Image uploaded successfully, get download URL
                         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             // Perform image analysis and save result to the database
-                            new ImageAnalysisTask(uri).execute();
+                            Timestamp timestamp = Timestamp.now();
+                            new ImageAnalysisTask(uri , timestamp ).execute();
+
+
+
+                            // Perform image analysis and save result to the database
+                            new ImageAnalysisTask(uri, timestamp).execute();
+
                         });
                     })
                     .addOnFailureListener(e -> {
@@ -337,9 +348,9 @@ public class ImageScanner extends AppCompatActivity {
     }
 
 
-    private void saveToFirebase(String imageUrl, String result) {
+    private void saveToFirebase(String imageUrl, String result ,Timestamp timestamp) {
         if (uploadsRef != null) {
-            Upload upload = new Upload(imageUrl, result);
+            Upload upload = new Upload(imageUrl, result ,timestamp);
             uploadsRef.add(upload)
                     .addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "Upload successful");
