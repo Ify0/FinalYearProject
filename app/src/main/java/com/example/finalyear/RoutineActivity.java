@@ -1,15 +1,13 @@
 package com.example.finalyear;
 
-import static java.io.File.createTempFile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,43 +15,41 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.datatransport.backend.cct.BuildConfig;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.MessagingException;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.Authenticator;
+import javax.mail.Message;
 
 public class RoutineActivity extends AppCompatActivity {
 
@@ -68,6 +64,7 @@ public class RoutineActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private List<Product> filteredProducts;
 
+    private Session session;
     private UserPreferences userPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,9 +290,10 @@ public class RoutineActivity extends AppCompatActivity {
                 downloadJsonFile("/moisturiser/Dry/Pimples&PigmentationtreatDry.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Pimples")) {
                 downloadJsonFile("/moisturiser/Dry/Pimples&PigmentationtreatDry.json", userPreferences, recyclerViewMoisture);
-            } else if (userPreferences.getPriority().equals("Enlarged Pores")) {
             } else if (userPreferences.getPriority().equals("Dark Circles")) {
-
+                downloadJsonFile("/moisturiser/Dry/drySkinDarkCircles.json", userPreferences, recyclerViewMoisture);
+            } else if (userPreferences.getPriority().equals("Enlarged Pores")){
+                downloadJsonFile("/moisturiser/Dry/drySkinEnlargedPores.json", userPreferences, recyclerViewMoisture);
             }
         } else if (userPreferences.isNormalSkin()) {
             downloadJsonFile("/cleansers/NormalSkinCleanser.json", userPreferences, recyclerViewCleanser);
@@ -308,8 +306,9 @@ public class RoutineActivity extends AppCompatActivity {
             } else if (userPreferences.getPriority().equals("Pimples")) {
                 downloadJsonFile("/moisturiser/NormalSkin/Pimples&PigmentationMoistNS.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Enlarged Pores")) {
+                downloadJsonFile("/moisturiser/NormalSkin/EnlargedPoresNS.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Dark Circles")) {
-
+                downloadJsonFile("/moisturiser/NormalSkin/darkcirclesOLIYCOMBNS.json", userPreferences, recyclerViewMoisture);
             }
         } else if (userPreferences.isOily()) {
             downloadJsonFile("/cleansers/OilyCleanser.json", userPreferences, recyclerViewCleanser);
@@ -322,7 +321,9 @@ public class RoutineActivity extends AppCompatActivity {
             } else if (userPreferences.getPriority().equals("Pimples")) {
                 downloadJsonFile("/moisturiser/Oliy/Pimples&PigmentationMoistOliy.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Enlarged Pores")) {
+                downloadJsonFile("/moisturiser/Oliy/enlargedporesOliyComb.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Dark Circles")) {
+                downloadJsonFile("/moisturiser/Oliy/darkcirclesOLIYCOMBNS.json", userPreferences, recyclerViewMoisture);
             }
         }
         if (userPreferences.isCombination()) {
@@ -336,7 +337,9 @@ public class RoutineActivity extends AppCompatActivity {
             } else if (userPreferences.getPriority().equals("Pimples")) {
                 downloadJsonFile("/moisturiser/NormalSkin/Pimples&PigmentationMoistNS.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Enlarged Pores")) {
+                downloadJsonFile("/moisturiser/Oliy/enlargedporesOliyComb.json", userPreferences, recyclerViewMoisture);
             } else if (userPreferences.getPriority().equals("Dark Circles")) {
+                downloadJsonFile("/moisturiser/Oliy/darkcirclesOLIYCOMBNS.json", userPreferences, recyclerViewMoisture);
             }
         }
 
@@ -714,16 +717,92 @@ public class RoutineActivity extends AppCompatActivity {
  //      }
  //  }
 
-    private void showEmailDialog() {
-        String subject = "Skincare Routine for " + currentUser.getEmail();
-        String body = getSkincareRoutineEmailBody();
+ //   private void showEmailDialog() {
+ //       String subject = "Skincare Routine for " + currentUser.getEmail();
+ //       String body = getSkincareRoutineEmailBody();
+//
+ //       Intent shareIntent = new Intent(Intent.ACTION_SEND);
+ //       shareIntent.setType("text/plain");
+ //       shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+ //       shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+ //       startActivity(Intent.createChooser(shareIntent, "Share with:"));
+ //   }
 
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, body);
-        startActivity(Intent.createChooser(shareIntent, "Share with:"));
+
+
+
+    private void showEmailDialog() {
+        // Inflate the custom layout for the dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_email_input, null);
+        EditText emailEditText = dialogView.findViewById(R.id.emailEditText);
+
+        // Create AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView)
+                .setTitle("Enter Email Address")
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Retrieve the email address entered by the user
+                        String email = emailEditText.getText().toString();
+
+                        // Check if the email is valid
+                        if (!TextUtils.isEmpty(email)) {
+                            // Send email using the entered email address
+                            sendEmail(email);
+                        } else {
+                            // Display error message if email is empty
+                            Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
+
+
+    private void sendEmail(final String email) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                String subject = "Skincare Routine for " + currentUser.getEmail();
+                String body = getSkincareRoutineEmailBody();
+
+                Properties properties = new Properties();
+                properties.put("mail.smtp.host", "smtp.gmail.com");
+                properties.put("mail.smtp.socketFactory.port", "465");
+                properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                properties.put("mail.smtp.auth", "true");
+                properties.put("mail.smtp.port", "465");
+
+                Session session = Session.getInstance(properties, new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(Utils.EMAIL, Utils.PASSWORD);
+                    }
+                });
+
+                try {
+                    MimeMessage mimeMessage = new MimeMessage(session);
+                    mimeMessage.setFrom(new InternetAddress(Utils.EMAIL));
+                    mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+                    mimeMessage.setSubject(subject);
+                    mimeMessage.setText(body);
+                    Transport.send(mimeMessage);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                Toast.makeText(getApplicationContext(), "Email sent successfully", Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
+    }
+
+
 
     private String getSkincareRoutineEmailBody() {
         StringBuilder body = new StringBuilder();
