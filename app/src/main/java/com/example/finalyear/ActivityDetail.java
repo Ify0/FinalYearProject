@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.finalyear.databinding.ActivityDetailBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,11 +36,21 @@ public class ActivityDetail extends AppCompatActivity {
         List<String> parsedExtra = Arrays.asList(getIntent().getStringArrayExtra("Parsed Extra"));
         skincareProduct.set__parsed_extra(parsedExtra);
 
+        // Set up RecyclerView for parsed extra
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        binding.detailParsedExtra.setLayoutManager(layoutManager);
+        ParsedExtraAdapter adapter = new ParsedExtraAdapter(skincareProduct.get__parsed_extra());
+        binding.detailParsedExtra.setAdapter(adapter);
+
         if (skincareProduct != null) {
             binding.detailDesc.setText(skincareProduct.getIngredients());
             binding.detailTitle.setText(skincareProduct.getProduct_name());
             binding.detailPriority.setText(skincareProduct.getBrand());
-            binding.detailParsedExtra.setText(skincareProduct.get__parsed_extra().toString());
+           // binding.detailParsedExtra.setText(skincareProduct.get__parsed_extra().toString());
+            StringBuilder parsedExtraBuilder = new StringBuilder();
+            for (String extra : skincareProduct.get__parsed_extra()) {
+                parsedExtraBuilder.append(extra);
+            }
         }
 
         // Add an OnCheckedChangeListener to the CheckBox
@@ -51,6 +62,7 @@ public class ActivityDetail extends AppCompatActivity {
             }
         });
     }
+
 
     private void addToFavorites(SkincareProduct product) {
         // Create a new document in the "favourites" collection under the user's UID

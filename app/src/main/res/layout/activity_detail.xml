@@ -32,7 +32,7 @@
         android:layout_width="394dp"
         android:layout_height="wrap_content"
         android:button="@drawable/favorites"
-        android:text=" Add to Favouturites "
+        android:text=" Add to Favorites "
         android:textColor="@color/lavender" />
 
     <TextView
@@ -57,15 +57,11 @@
         android:textColor="@color/lavender"
         android:textSize="18sp" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detailParsedExtra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:padding="20dp"
-        android:text="Parsed Extra"
-        android:textColor="@color/lavender"
-        android:textSize="18sp" />
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>
