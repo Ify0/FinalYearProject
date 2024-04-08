@@ -1,5 +1,6 @@
 package com.example.finalyear;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class ActivityDetail extends AppCompatActivity {
             }
         }
 
+
         // Add an OnCheckedChangeListener to the CheckBox
         binding.favourite.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -61,6 +63,12 @@ public class ActivityDetail extends AppCompatActivity {
                 removeFromFavorites(skincareProduct);
             }
         });
+
+        // Set OnClickListener for the info button
+        binding.imageButton2.setOnClickListener(v -> {
+            showColorSchemeDialog();
+        });
+
     }
 
 
@@ -80,6 +88,17 @@ public class ActivityDetail extends AppCompatActivity {
                         Toast.makeText(ActivityDetail.this, "Failed to add to Favorites", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void showColorSchemeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityDetail.this);
+        builder.setTitle("Color Scheme for Ingredients Awareness");
+        builder.setMessage("Yellow indicates a low penalty for your skin, orange indicates a medium penalty, and red indicates a strong penalty for your skin. Make informed decisions based on this color scheme.");
+        builder.setPositiveButton("Got it", (dialog, which) -> {
+            // Do nothing, just close the dialog
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void removeFromFavorites(SkincareProduct product) {

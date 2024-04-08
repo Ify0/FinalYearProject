@@ -127,8 +127,8 @@ public class ImageScanner extends AppCompatActivity {
                 // Perform image analysis and save result to the database
                 showLoadingLayout();
                 analyzeAndSaveToDatabase();
-               Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
-               startActivity(intent);
+              // Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
+              // startActivity(intent);
 
             }
         });
@@ -290,6 +290,8 @@ public class ImageScanner extends AppCompatActivity {
                     // Handle the success result if needed
                     // Now, you can save the result to the database
                     saveToFirebase(imageUrl, result , timestamp);
+                    Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override

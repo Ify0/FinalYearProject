@@ -67,8 +67,8 @@ public class SkinReader extends AppCompatActivity {
             public void onClick(View view) {
                 showLoadingLayout();
                 saveDataToFirestore();
-                Intent intent = new Intent(SkinReader.this, ImageScanner.class);
-                startActivity(intent);
+                //Intent intent = new Intent(SkinReader.this, ImageScanner.class);
+                //startActivity(intent);
 
             }
         });
@@ -122,6 +122,9 @@ public class SkinReader extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.e(TAG, "Data saved successfully ");
                             hideLoadingDialog(); // Add this line to hide the loading dialog after saving data
+                            // Start the next intent after data is saved
+                            Intent intent = new Intent(SkinReader.this, ImageScanner.class);
+                            startActivity(intent);
                         } else {
                             Log.e(TAG, "Failed to save data");
                             hideLoadingDialog(); // Ensure the loading dialog is hidden even in case of failure

@@ -1,7 +1,10 @@
 package com.example.finalyear;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ public class ResultsActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
     private FirebaseStorage storage;
+    private String predictedClass, confidence, mainPriorityValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +49,11 @@ public class ResultsActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             retrieveImage();
-            retrieveAnalysisResult();
-            retrieveMainPriorityValue();
+           // retrieveAnalysisResult();
+           // retrieveMainPriorityValue();
         }
+        retrieveAnalysisResult();
+        retrieveMainPriorityValue();
 
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,8 +111,9 @@ public class ResultsActivity extends AppCompatActivity {
                         for (DocumentSnapshot document : task.getResult()) {
                             String analysisResult = document.getString("analysisResult");
                             // Extract the predicted class value
-                            String predictedClass = extractPredictedClass(analysisResult);
-                            String confidence = extractConfidenceClass(analysisResult);
+                            predictedClass = extractPredictedClass(analysisResult);
+                            confidence = extractConfidenceClass(analysisResult);
+
                             // Update UI element
                             mainPriorityValueTextView.setText(predictedClass);
                             likelyTextView.setText(confidence);
@@ -114,6 +121,9 @@ public class ResultsActivity extends AppCompatActivity {
                             // Assuming there's only one analysis result, break after the first iteration
                             break;
                         }
+                    } else {
+                        // Handle errors
+                        Log.e(TAG, "Error getting analysis result: ", task.getException());
                     }
                 });
     }
@@ -127,7 +137,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DocumentSnapshot document : task.getResult()) {
-                            String mainPriorityValue = document.getString("priority");
+                            mainPriorityValue = document.getString("priority");
 
                             // Update UI element
                             selectionMainPriorityValueTextView.setText(mainPriorityValue);
@@ -135,6 +145,9 @@ public class ResultsActivity extends AppCompatActivity {
                             // Assuming there's only one main priority value, break after the first iteration
                             break;
                         }
+                    } else {
+                        // Handle errors
+                        Log.e(TAG, "Error getting main priority value: ", task.getException());
                     }
                 });
     }
@@ -148,6 +161,7 @@ public class ResultsActivity extends AppCompatActivity {
         }
         return "";
     }
+
     private String extractConfidenceClass(String analysisResult) {
         // Extracting the predicted class value from the analysis result string
         // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
@@ -175,7 +189,4 @@ public class ResultsActivity extends AppCompatActivity {
         }
         return "";
     }
-
-
-
 }
