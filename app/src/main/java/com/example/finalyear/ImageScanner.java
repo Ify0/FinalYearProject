@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.Manifest;
 
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -33,33 +35,23 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-
-import com.google.android.material.button.MaterialButton;
-import com.google.common.util.concurrent.ListenableFuture;
-import androidx.camera.core.CameraSelector;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.finalyear.R;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class ImageScanner extends AppCompatActivity {
@@ -76,7 +68,6 @@ public class ImageScanner extends AppCompatActivity {
     private StorageReference storageReference;
     private AlertDialog loadingDialog;
 
-    //private PreviewView previewView;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageCapture imageCapture;
 
@@ -84,7 +75,6 @@ public class ImageScanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_image_activity);
-
 
         // Initialize Firebase
         firestore = FirebaseFirestore.getInstance();
@@ -100,23 +90,26 @@ public class ImageScanner extends AppCompatActivity {
         Button useCameraButton = findViewById(R.id.cameraBtn);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
-
         // Inside onCreate
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference("uploads"); // "uploads" is the name of your storage folder
 
-
-
         // Set click listeners
         uploadButton.setOnClickListener(view -> openFileChooser());
-
-
 
         useCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startCamera();
                 checkCameraPermissionAndOpenCamera();
+            }
+        });
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
             }
         });
 
@@ -127,17 +120,13 @@ public class ImageScanner extends AppCompatActivity {
                 // Perform image analysis and save result to the database
                 showLoadingLayout();
                 analyzeAndSaveToDatabase();
-               Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
-               startActivity(intent);
-
             }
         });
-
     }
+
     private void checkCameraPermissionAndOpenCamera() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
-           // startCamera();
             pickImageCamera();
         } else {
             ActivityCompat.requestPermissions(this,
@@ -177,7 +166,6 @@ public class ImageScanner extends AppCompatActivity {
                 public void onActivityResult(ActivityResult o) {
                     if (o.getResultCode() == Activity.RESULT_OK) {
                         Intent data = o.getData();
-                        Log.d(TAG, "onActivityResult: imageUri" + imageUri);
                         // Handle the captured image URI as needed (e.g., display in an ImageView)
                         imageView.setImageURI(imageUri);
                     } else {
@@ -198,15 +186,13 @@ public class ImageScanner extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
     }
+
     private void bindCameraUseCases(ProcessCameraProvider cameraProvider) {
         // Set up preview
         Preview preview = new Preview.Builder().build();
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                 .build();
-
-        //preview.setSurfaceProvider(imageView.getSurfaceProvider());
-
 
         // Set up image capture
         imageCapture = new ImageCapture.Builder().build();
@@ -239,7 +225,6 @@ public class ImageScanner extends AppCompatActivity {
             loadingDialog.dismiss();
         }
     }
-
 
     private void openFileChooser() {
         Intent intent = new Intent();
@@ -277,7 +262,6 @@ public class ImageScanner extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             // Convert Uri to URL
-            //URL url = new URL(uri.toString());
             String imageUrl = uri.toString();
 
             // Create an instance of ImageAnalyzer
@@ -287,20 +271,35 @@ public class ImageScanner extends AppCompatActivity {
             imageAnalyzer.analyzeImage(imageUrl, new ImageAnalyzer.AnalysisCallback() {
                 @Override
                 public void onAnalysisSuccess(String imageUrl, String result) {
-                    // Handle the success result if needed
-                    // Now, you can save the result to the database
-                    saveToFirebase(imageUrl, result , timestamp);
+                    // Save the result to the database
+                    saveToFirebase(imageUrl, result, timestamp)
+                            .addOnSuccessListener(documentReference -> {
+                                Log.d(TAG, "Upload successful");
+                                // Start next activity after result has been saved to Firestore
+                                Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Upload failed: " + e.getMessage());
+                            });
                 }
 
                 @Override
                 public void onAnalysisFailure(String imageUrl, String errorMessage) {
-                    // Handle the failure result if needed
-                    // Now, you can save the failure message to the database
-                    saveToFirebase(imageUrl, errorMessage ,  timestamp);
+                    // Save the failure message to the database
+                    saveToFirebase(imageUrl, errorMessage, timestamp)
+                            .addOnSuccessListener(documentReference -> {
+                                Log.d(TAG, "Upload successful");
+                                // Start next activity even if analysis failed, but result (error message) has been saved to Firestore
+                                Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
+                                startActivity(intent);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Upload failed: " + e.getMessage());
+                            });
                 }
             });
 
-            // You might want to return some value or null based on your needs
             return null;
         }
 
@@ -308,9 +307,7 @@ public class ImageScanner extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             // This method will be called after doInBackground completes
-            // Now, you have already saved the result to the database in onAnalysisSuccess/onAnalysisFailure
             hideLoadingLayout(); // Add this line to hide loading layout after analysis
-
         }
     }
 
@@ -330,13 +327,7 @@ public class ImageScanner extends AppCompatActivity {
                         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             // Perform image analysis and save result to the database
                             Timestamp timestamp = Timestamp.now();
-                            new ImageAnalysisTask(uri , timestamp ).execute();
-
-
-
-                            // Perform image analysis and save result to the database
                             new ImageAnalysisTask(uri, timestamp).execute();
-
                         });
                     })
                     .addOnFailureListener(e -> {
@@ -347,19 +338,13 @@ public class ImageScanner extends AppCompatActivity {
         }
     }
 
-
-    private void saveToFirebase(String imageUrl, String result ,Timestamp timestamp) {
+    private Task<DocumentReference> saveToFirebase(String imageUrl, String result, Timestamp timestamp) {
         if (uploadsRef != null) {
-            Upload upload = new Upload(imageUrl, result ,timestamp);
-            uploadsRef.add(upload)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.d(TAG, "Upload successful");
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e(TAG, "Upload failed: " + e.getMessage());
-                    });
+            Upload upload = new Upload(imageUrl, result, timestamp);
+            return uploadsRef.add(upload);
         } else {
             Log.e(TAG, "User not authenticated");
+            return null;
         }
     }
 

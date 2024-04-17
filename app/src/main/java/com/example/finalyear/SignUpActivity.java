@@ -30,7 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
     private Button signUpButton;
-    private EditText email , password , confirmPassword ;
+    private EditText username, email, password, confirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.signup_activity);
 
         signUpButton = findViewById(R.id.button);
+        username = findViewById(R.id.username); // Initialize the username EditText
         email = findViewById(R.id.email);
         password = findViewById(R.id.password1);
         confirmPassword = findViewById(R.id.password2);
@@ -46,8 +47,9 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email1 = email.getText().toString();
-                String password1 = password.getText().toString();
+                final String username1 = username.getText().toString(); // Get the username entered by the user
+                final String email1 = email.getText().toString();
+                final String password1 = password.getText().toString();
                 String confirmPassword1 = confirmPassword.getText().toString();
 
                 if (password1.equals(confirmPassword1)) {
@@ -58,15 +60,21 @@ public class SignUpActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // User registered successfully
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        // Save the user's email into Firestore
+
+                                        // Save the user's email and username into Firestore
                                         Map<String, Object> userMap = new HashMap<>();
                                         userMap.put("email", email1);
+                                        userMap.put("username", username1);
+
+                                        // Store the password temporarily (not recommended)
+                                        userMap.put("password", password1);
+
                                         mFirestore.collection("Users").document(user.getUid())
                                                 .set(userMap)
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        // The user's email was saved successfully into Firestore
+                                                        // The user's email, username, and password were saved successfully into Firestore
                                                         Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
                                                         startActivity(intent);
                                                     }
@@ -74,8 +82,8 @@ public class SignUpActivity extends AppCompatActivity {
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        // The user's email was not saved into Firestore
-                                                        Toast.makeText(SignUpActivity.this, "Failed to save user's email into Firestore.", Toast.LENGTH_SHORT).show();
+                                                        // The user's email, username, and password were not saved into Firestore
+                                                        Toast.makeText(SignUpActivity.this, "Failed to save user's information into Firestore.", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                     } else {

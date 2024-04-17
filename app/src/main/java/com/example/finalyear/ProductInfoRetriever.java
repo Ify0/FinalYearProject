@@ -27,7 +27,7 @@ public class ProductInfoRetriever extends AsyncTask<String, Void, String> {
     private OnProductInfoReceivedListener listener;
 
     public interface OnProductInfoReceivedListener {
-        void onProductInfoReceived(String productName, String ingredients);
+        void onProductInfoReceived(String productName, String ingredients, String brands);
     }
 
     public void setOnProductInfoReceivedListener(OnProductInfoReceivedListener listener) {
@@ -74,12 +74,12 @@ public class ProductInfoRetriever extends AsyncTask<String, Void, String> {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONObject product = jsonObject.getJSONObject("product");
 
-                String productName = product.optString("product_name", "");
-                String ingredients = product.optString("ingredients_text", "");
-
+                String productName = product.optString("product_name", "404 Not Found");
+                String ingredients = product.optString("ingredients_text", "404 Not Found");
+                String brands =  product.optString("brands", "404 Not Found");
                 if (listener != null) {
-                    listener.onProductInfoReceived(productName, ingredients);
-                    startProductInfoActivity(productName, ingredients); // Changed this line
+                    listener.onProductInfoReceived(productName, ingredients, brands);
+                    startProductInfoActivity(productName, ingredients, brands); // Changed this line
                 }
             } catch (JSONException e) {
                 Log.e("ProductInfoRetriever", "Error parsing JSON", e);
@@ -87,10 +87,11 @@ public class ProductInfoRetriever extends AsyncTask<String, Void, String> {
         }
     }
 
-    private void startProductInfoActivity(String productName, String ingredients) {
+    private void startProductInfoActivity(String productName, String ingredients, String brands) {
         Intent intent = new Intent(context, productInfoActivity.class);
         intent.putExtra("PRODUCT_NAME", productName);
         intent.putExtra("INGREDIENTS", ingredients);
+        intent.putExtra("BRANDS", brands);
         context.startActivity(intent);
     }
 }

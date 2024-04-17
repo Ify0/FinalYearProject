@@ -2,7 +2,9 @@ package com.example.finalyear;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,7 +80,14 @@ public class ScannerActivity extends AppCompatActivity {
                 .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
                 .build();
         barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions);
-
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,10 +130,11 @@ public class ScannerActivity extends AppCompatActivity {
 
                             // Use ProductInfoRetriever to get additional product information
                             ProductInfoRetriever productInfoRetriever = new ProductInfoRetriever(ScannerActivity.this);
-                            productInfoRetriever.setOnProductInfoReceivedListener((productName, ingredients) -> {
+                            productInfoRetriever.setOnProductInfoReceivedListener((productName, ingredients,brands) -> {
                                 // Handle the received product information (e.g., display it in UI)
                                 Log.d(TAG, "Product Name: " + productName);
                                 Log.d(TAG, "Ingredients: " + ingredients);
+                                Log.d(TAG, "Brands: " + brands);
                             });
                             productInfoRetriever.execute(barcode);
                         }
@@ -131,7 +142,7 @@ public class ScannerActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ScannerActivity.this, "Failed scanning due to " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            showFailureDialog();
                         }
                     });
         } catch (Exception e) {
@@ -139,6 +150,18 @@ public class ScannerActivity extends AppCompatActivity {
         }
     }
 
+    private void showFailureDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Oh no, this product is not available.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // You can perform any action here on OK button click
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     private void extractBarCodeQRCodeInfo(List<Barcode> barcodes) {
         for (Barcode barcode : barcodes) {
             Rect bounds = barcode.getBoundingBox();

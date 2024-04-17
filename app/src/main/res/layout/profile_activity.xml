@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6FA">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/textMenu"
+                android:layout_width="377dp"
+                android:layout_height="73dp"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:text="My Profile"
+                android:textColor="#800080"
+                android:textSize="30sp" />
+
+            <!-- User Details -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_background"
+                android:elevation="3dp"
+                android:padding="16dp">
+
+                <!-- Username -->
+                <EditText
+                    android:id="@+id/editTextUsername"
+                    android:layout_width="333dp"
+                    android:layout_height="54dp"
+                    android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+                    android:hint="Username"
+                    android:textColor="#800080"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/view1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#d9d9d9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
+
+                <!-- Email -->
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="340dp"
+                    android:layout_height="65dp"
+                    android:drawableLeft="@drawable/ic_baseline_mail_outline_24"
+                    android:hint="Email"
+                    android:textColor="#800080"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/view2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view1" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#d9d9d9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+                <!-- Password Change Button -->
+                <Button
+                    android:id="@+id/btnChangePassword"
+                    android:layout_width="333dp"
+                    android:layout_height="54dp"
+                    android:backgroundTint="#800080"
+                    android:text="Change Password"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="386dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="#800080"
+                android:text="Logout"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Logout Button -->
+
+    <!-- Save Changes Button -->
+    <Button
+        android:id="@+id/SaveButton"
+        android:layout_width="356dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="#800080"
+        android:text="Save Changes"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
