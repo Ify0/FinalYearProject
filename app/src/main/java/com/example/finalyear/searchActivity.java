@@ -1,6 +1,8 @@
 package com.example.finalyear;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +35,15 @@ public class searchActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(gridLayoutManager);
         binding.search.clearFocus();
 
+        ImageButton backButton = binding.backButton;
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setView(R.layout.progress_layout);

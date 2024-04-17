@@ -7,16 +7,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -49,11 +54,18 @@ public class ResultsActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             retrieveImage();
-           // retrieveAnalysisResult();
-           // retrieveMainPriorityValue();
         }
         retrieveAnalysisResult();
         retrieveMainPriorityValue();
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
 
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,10 +81,15 @@ public class ResultsActivity extends AppCompatActivity {
         db.collection("Users")
                 .document(currentUser.getUid())
                 .collection("uploads")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error getting image path: ", e);
+                            return;
+                        }
+
+                        for (DocumentSnapshot document : snapshots) {
                             String imagePath = document.getString("imageUrl");
 
                             // Directly pass the imageUrl to Glide for loading
@@ -105,10 +122,15 @@ public class ResultsActivity extends AppCompatActivity {
         db.collection("Users")
                 .document(currentUser.getUid())
                 .collection("uploads")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error getting analysis result: ", e);
+                            return;
+                        }
+
+                        for (DocumentSnapshot document : snapshots) {
                             String analysisResult = document.getString("analysisResult");
                             // Extract the predicted class value
                             predictedClass = extractPredictedClass(analysisResult);
@@ -121,9 +143,6 @@ public class ResultsActivity extends AppCompatActivity {
                             // Assuming there's only one analysis result, break after the first iteration
                             break;
                         }
-                    } else {
-                        // Handle errors
-                        Log.e(TAG, "Error getting analysis result: ", task.getException());
                     }
                 });
     }
@@ -133,10 +152,15 @@ public class ResultsActivity extends AppCompatActivity {
         db.collection("Users")
                 .document(currentUser.getUid())
                 .collection("Report")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error getting main priority value: ", e);
+                            return;
+                        }
+
+                        for (DocumentSnapshot document : snapshots) {
                             mainPriorityValue = document.getString("priority");
 
                             // Update UI element
@@ -145,9 +169,6 @@ public class ResultsActivity extends AppCompatActivity {
                             // Assuming there's only one main priority value, break after the first iteration
                             break;
                         }
-                    } else {
-                        // Handle errors
-                        Log.e(TAG, "Error getting main priority value: ", task.getException());
                     }
                 });
     }
@@ -182,7 +203,7 @@ public class ResultsActivity extends AppCompatActivity {
                     // Add any additional conditions as needed
                     return "Unknown";
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ex) {
                 // Handle non-numeric values, e.g., "hyperpigmentation"
                 return "Unknown";
             }

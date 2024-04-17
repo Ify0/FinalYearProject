@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="118dp"
-        android:background="#7C6980"/>
+        android:background="#7C6980" />
 
     <TextView
         android:id="@+id/textView3"
@@ -119,6 +119,19 @@
         android:contentDescription="@string/app_name"
         app:srcCompat="@drawable/arrow" />
 
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="78dp"
+        android:layout_height="61dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="305dp"
+        android:layout_marginBottom="54dp"
+        android:contentDescription="@string/app_name"
+        android:scaleX="-1"
+        app:srcCompat="@drawable/arrow" />
+
     <include layout="@layout/progress_layout"
         android:visibility="gone" />
+
 </RelativeLayout>

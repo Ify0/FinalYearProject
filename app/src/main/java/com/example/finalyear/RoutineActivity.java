@@ -3,6 +3,7 @@ package com.example.finalyear;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -88,7 +90,14 @@ public class RoutineActivity extends AppCompatActivity {
             // User is not signed in, handle accordingly
             Log.d("Firestore", "User is not signed in.");
         }
-
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
         // Set onClickListener for the "SEND ROUTINE" button
         Button sendRoutineButton = findViewById(R.id.sendRoutineButton);
         sendRoutineButton.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +108,7 @@ public class RoutineActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void initializeFirebase() {
         firestore = FirebaseFirestore.getInstance();
@@ -750,6 +760,10 @@ public class RoutineActivity extends AppCompatActivity {
                         if (!TextUtils.isEmpty(email)) {
                             // Send email using the entered email address
                             sendEmail(email);
+
+                            // Return to the main activity
+                            Intent intent = new Intent(RoutineActivity.this, MenuActivity.class);
+                            startActivity(intent);
                         } else {
                             // Display error message if email is empty
                             Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
@@ -761,12 +775,15 @@ public class RoutineActivity extends AppCompatActivity {
     }
 
 
+
     private void sendEmail(final String email) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                String subject = "Skincare Routine for " + currentUser.getEmail();
-                String body = getSkincareRoutineEmailBody();
+                String subject = "Detectorize Personalized Skin Care Routine";
+                String body = "Hi " + currentUser.getEmail() + ",\n\n"
+                        + "This is your personalized skincare routine:\n\n"
+                        + getSkincareRoutineEmailBody();
 
                 Properties properties = new Properties();
                 properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -801,6 +818,7 @@ public class RoutineActivity extends AppCompatActivity {
             }
         }.execute();
     }
+
 
 
 

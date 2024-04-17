@@ -2,6 +2,9 @@ package com.example.finalyear;
 
 // FavoritesActivity.java
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -53,7 +56,14 @@ public class FavoritesActivity extends AppCompatActivity {
                 }
             }
         };
-
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerViewFavorites);
 

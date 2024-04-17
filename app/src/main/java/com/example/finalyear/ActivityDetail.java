@@ -2,6 +2,8 @@ package com.example.finalyear;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -68,7 +70,14 @@ public class ActivityDetail extends AppCompatActivity {
         binding.imageButton2.setOnClickListener(v -> {
             showColorSchemeDialog();
         });
-
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
     }
 
 
