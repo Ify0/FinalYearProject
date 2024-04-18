@@ -84,7 +84,7 @@ public class productInfoActivity extends AppCompatActivity {
         });
 
         // Set OnClickListener for the info button
-        ImageButton infoButton = findViewById(R.id.imageButton2);
+        ImageButton infoButton = findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> {
             showColorSchemeDialog();
         });

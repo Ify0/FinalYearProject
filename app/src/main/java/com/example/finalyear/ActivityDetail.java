@@ -67,7 +67,7 @@ public class ActivityDetail extends AppCompatActivity {
         });
 
         // Set OnClickListener for the info button
-        binding.imageButton2.setOnClickListener(v -> {
+        binding.infoButton.setOnClickListener(v -> {
             showColorSchemeDialog();
         });
         ImageButton backButton = findViewById(R.id.backButton);

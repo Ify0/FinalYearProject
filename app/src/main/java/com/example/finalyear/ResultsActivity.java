@@ -25,56 +25,64 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class ResultsActivity extends AppCompatActivity {
+    public class ResultsActivity extends AppCompatActivity {
 
-    private ImageView resultImageView;
-    private TextView mainPriorityValueTextView;
-    private TextView likelyTextView;
-    private TextView selectionMainPriorityValueTextView;
-    private Button discoverButton;
-    private FirebaseFirestore db;
-    private FirebaseUser currentUser;
-    private FirebaseStorage storage;
-    private String predictedClass, confidence, mainPriorityValue;
+        private static final String TAG = "ResultsActivity"; // Added TAG declaration
+        private ImageView resultImageView;
+        private TextView mainPriorityValueTextView;
+        private TextView likelyTextView;
+        private TextView selectionMainPriorityValueTextView;
+        private Button discoverButton;
+        private FirebaseFirestore db;
+        private FirebaseUser currentUser;
+        private FirebaseStorage storage;
+        private String predictedClass, confidence, mainPriorityValue;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.results_activity);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.results_activity);
 
-        discoverButton = findViewById(R.id.discoverButton);
-        resultImageView = findViewById(R.id.resultImageView);
-        mainPriorityValueTextView = findViewById(R.id.mainPriorityValueTextView);
-        likelyTextView = findViewById(R.id.likelyTextView);
-        selectionMainPriorityValueTextView = findViewById(R.id.selectionMainPriorityValueTextView);
+            discoverButton = findViewById(R.id.discoverButton);
+            resultImageView = findViewById(R.id.resultImageView);
+            mainPriorityValueTextView = findViewById(R.id.mainPriorityValueTextView);
+            likelyTextView = findViewById(R.id.likelyTextView);
+            selectionMainPriorityValueTextView = findViewById(R.id.selectionMainPriorityValueTextView);
 
-        db = FirebaseFirestore.getInstance();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        storage = FirebaseStorage.getInstance();
+            db = FirebaseFirestore.getInstance();
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            storage = FirebaseStorage.getInstance();
 
-        if (currentUser != null) {
-            retrieveImage();
+            ImageButton backButton = findViewById(R.id.backButton);
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle back button click event
+                    onBackPressed();
+                }
+            });
+
+            discoverButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ResultsActivity.this, RoutineActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
-        retrieveAnalysisResult();
-        retrieveMainPriorityValue();
 
-        ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle back button click event
-                onBackPressed();
+        @Override // Added onResume method
+        protected void onResume() {
+            super.onResume();
+            if (currentUser != null) {
+                retrieveImage();
             }
-        });
+            retrieveAnalysisResult();
+            retrieveMainPriorityValue();
+        }
 
-        discoverButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ResultsActivity.this, RoutineActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
+        // Remaining methods are unchanged
+        // ...
 
     private void retrieveImage() {
         // Firestore reference for the user's dynamically changing image path
