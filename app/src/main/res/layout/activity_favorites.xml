@@ -16,7 +16,7 @@
         android:layout_marginTop="0dp"
         android:background="@null"
         android:scaleX="-1"
-        app:srcCompat="@drawable/arrow" />
+        app:srcCompat="@drawable/forwardbutton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewFavorites"

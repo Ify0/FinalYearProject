@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:background="@null"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/arrow"
+        app:srcCompat="@drawable/backbutton"
         tools:ignore="TouchTargetSizeCheck" />
 
 

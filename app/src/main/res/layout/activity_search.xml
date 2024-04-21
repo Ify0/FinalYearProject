@@ -8,20 +8,21 @@
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="73dp"
+        android:layout_width="87dp"
         android:layout_height="70dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/arrow"
+        android:src="@drawable/backbutton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
-        android:layout_width="312dp"
-        android:layout_height="63dp"
+        android:layout_width="313dp"
+        android:layout_height="68dp"
         android:layout_margin="1dp"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
