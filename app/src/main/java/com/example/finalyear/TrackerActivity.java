@@ -3,9 +3,11 @@ package com.example.finalyear;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.github.mikephil.charting.charts.BarChart;
@@ -24,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +38,7 @@ public class TrackerActivity extends AppCompatActivity {
     private BarChart barChart;
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
+    TextView yAxisLabelTextView;
 
     private List<String> xValues;
     private HashMap<String, Integer> skinConditionColors;
@@ -43,6 +48,8 @@ public class TrackerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracker);
+         yAxisLabelTextView = findViewById(R.id.yAxisLabelTextView);
+// Further customization if needed
 
         barChart = findViewById(R.id.barChart);
         firestore = FirebaseFirestore.getInstance();
@@ -53,8 +60,8 @@ public class TrackerActivity extends AppCompatActivity {
         skinConditionColors.put("pimples", Color.GREEN);
         skinConditionColors.put("fine_lines", Color.BLUE);
         skinConditionColors.put("wrinkles", Color.YELLOW);
-        skinConditionColors.put("enlarged_pores", Color.MAGENTA);
-        skinConditionColors.put("dark_circles", Color.CYAN);
+        skinConditionColors.put("enlarged_pores", Color.parseColor("#FF00FF")); // Magenta
+        skinConditionColors.put("dark_circles", Color.parseColor("#00FFFF"));
 
         retrieveAnalysisResult();
 
@@ -78,8 +85,8 @@ public class TrackerActivity extends AppCompatActivity {
                                 "Green - Pimples\n" +
                                 "Blue - Fine Lines\n" +
                                 "Yellow - Wrinkles\n" +
-                                "Magenta - Enlarged Pores\n" +
-                                "Cyan - Dark Circles")
+                                "Orange - Enlarged Pores\n" +
+                                "Purple - Dark Circles")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Dismiss the dialog when the positive button is clicked
@@ -119,12 +126,30 @@ public class TrackerActivity extends AppCompatActivity {
                             entries.add(new BarEntry(xIndex, confidence));
                         }
 
+                        // Sort xValues in chronological order
+                        Collections.sort(xValues, new Comparator<String>() {
+                            DateFormat dateFormat = new SimpleDateFormat("dd/MM", Locale.getDefault());
+
+                            @Override
+                            public int compare(String date1, String date2) {
+                                try {
+                                    Date d1 = dateFormat.parse(date1);
+                                    Date d2 = dateFormat.parse(date2);
+                                    return d1.compareTo(d2);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    return 0;
+                                }
+                            }
+                        });
+
                         setupBarChart(entries);
                     } else {
                         // Handle error
                     }
                 });
     }
+
 
     private void setupBarChart(List<BarEntry> entries) {
         XAxis xAxis = barChart.getXAxis();
@@ -139,9 +164,16 @@ public class TrackerActivity extends AppCompatActivity {
         yAxis.setAxisLineColor(Color.BLACK);
         yAxis.setLabelCount(11);
 
+        YAxis rightYAxis = barChart.getAxisRight();
+        rightYAxis.setEnabled(false); // disable right Y axis
+
+        // Add label at the top of the left Y-axis
+        yAxis.setDrawTopYLabelEntry(true);
+        yAxis.setDrawTopYLabelEntry(true);
+
+
         Legend legend = barChart.getLegend();
-        legend.setEnabled(true);
-        legend.setWordWrapEnabled(true);
+        legend.setEnabled(false);
 
         BarDataSet dataSet = new BarDataSet(entries, "Skin Conditions");
         dataSet.setColors(getColorPalette());
@@ -149,11 +181,12 @@ public class TrackerActivity extends AppCompatActivity {
         dataSet.setValueTextSize(0f); // Hide values on bars
 
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.8f); // Increase bar width for aesthetics
+        barData.setBarWidth(1f); // Increase bar width for aesthetics
 
         barChart.setData(barData);
         barChart.invalidate();
     }
+
 
     private float extractConfidenceClass(String analysisResult) {
         String[] parts = analysisResult.split("Confidence: ");

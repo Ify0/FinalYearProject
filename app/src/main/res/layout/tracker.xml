@@ -12,38 +12,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="1dp"
         android:text="Skin Progress"
-        android:textSize="24sp" />
+        android:textSize="27sp" />
+
+    <TextView
+        android:id="@+id/yAxisLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="14dp"
+        android:text="Skin Confidence in Percentage"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="14sp" />
 
     <ImageButton
         android:id="@+id/infoButtonTop"
-        android:layout_width="60dp"
-        android:layout_height="43dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="1dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="16dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/app_name"
         android:padding="12dp"
         android:src="@drawable/icon_image" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_above="@+id/backButton"
-        android:layout_below="@+id/title"
-        android:layout_marginBottom="1dp" />
+        android:layout_below="@+id/yAxisLabelTextView"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp" />
 
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_height="34dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="4dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/app_name"
         android:padding="12dp"
-        android:src="@drawable/arrow" />
+        android:src="@drawable/backbutton" />
 
 </RelativeLayout>

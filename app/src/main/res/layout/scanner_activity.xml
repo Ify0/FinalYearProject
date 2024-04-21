@@ -79,6 +79,6 @@
         android:layout_marginBottom="39dp"
         android:background="@null"
         android:scaleX="-1"
-        app:srcCompat="@drawable/arrow" />
+        app:srcCompat="@drawable/forwardbutton" />
 
 </RelativeLayout>
