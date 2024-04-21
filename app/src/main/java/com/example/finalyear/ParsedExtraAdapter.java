@@ -21,6 +21,7 @@ public class ParsedExtraAdapter extends RecyclerView.Adapter<ParsedExtraAdapter.
     public ParsedExtraAdapter(List<String> parsedExtra) {
         this.parsedExtra = parsedExtra;
         this.ingredientColors = createIngredientColorMapping();
+
     }
 
     @NonNull
@@ -34,7 +35,7 @@ public class ParsedExtraAdapter extends RecyclerView.Adapter<ParsedExtraAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //holder.bind(parsedExtra.get(position));
         String ingredient = parsedExtra.get(position);
-        holder.bind(ingredient, ingredientColors);
+        holder.bind(ingredient, ingredientColors );
     }
 
     @Override
@@ -59,6 +60,7 @@ public class ParsedExtraAdapter extends RecyclerView.Adapter<ParsedExtraAdapter.
             }
         }
     }
+
 
     // Method to create a mapping of ingredient names to colors
     private HashMap<String, Integer> createIngredientColorMapping() {
@@ -493,6 +495,7 @@ public class ParsedExtraAdapter extends RecyclerView.Adapter<ParsedExtraAdapter.
         // Add more mappings as needed
         return mapping;
     }
+
 
     }
 

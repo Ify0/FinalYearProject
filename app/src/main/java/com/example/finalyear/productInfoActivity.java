@@ -4,6 +4,7 @@ package com.example.finalyear;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class productInfoActivity extends AppCompatActivity {
     private TextView productNameTv, ingredientsTv, brands;
     private RecyclerView recyclerView; // Declare RecyclerView
 
+    ImageButton backButton ;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
 
@@ -41,6 +43,7 @@ public class productInfoActivity extends AppCompatActivity {
         ingredientsTv = findViewById(R.id.detailDesc);
         brands = findViewById(R.id.detailPriority);
         recyclerView = findViewById(R.id.detailParsedExtra);
+        backButton = findViewById(R.id.backButton);
         skincareProduct = new SkincareProduct();
 
         // Retrieve data from Intent
@@ -49,6 +52,7 @@ public class productInfoActivity extends AppCompatActivity {
         List<String> parsedExtra = Arrays.asList(getIntent().getStringExtra("INGREDIENTS"));
         skincareProduct.setBrand(getIntent().getStringExtra("BRANDS"));
         skincareProduct.set__parsed_extra(parsedExtra);
+
 
         // Set data to TextViews
         productNameTv.setText(skincareProduct.getProduct_name());
@@ -60,17 +64,19 @@ public class productInfoActivity extends AppCompatActivity {
         }
 
        //// Set up RecyclerView for parsed extra
-       //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-       //recyclerView.setLayoutManager(layoutManager);
+        List<String> ingredientsList = Arrays.asList(intent.getStringExtra("INGREDIENTS"));
+       LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+       recyclerView.setLayoutManager(layoutManager);
        //ParsedExtraAdapter adapter = new ParsedExtraAdapter(skincareProduct.get__parsed_extra());
        //recyclerView.setAdapter(adapter);
 
         // Set up RecyclerView for parsed extra
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
+        //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        //recyclerView.setLayoutManager(layoutManager);
+        ParsedExtraAdapter adapter = new ParsedExtraAdapter(ingredientsList);
+        //binding.detailParsedExtra.setAdapter(adapter);
         // Initialize ParsedExtraAdapter with parsed extra list
-        ParsedExtraAdapter adapter = new ParsedExtraAdapter(parsedExtra);
+        //ParsedExtraAdapter adapter = new ParsedExtraAdapter(parsedExtra);
         recyclerView.setAdapter(adapter);
 
         // Add an OnCheckedChangeListener to the CheckBox
@@ -82,7 +88,13 @@ public class productInfoActivity extends AppCompatActivity {
                 removeFromFavorites(skincareProduct);
             }
         });
-
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle back button click event
+                onBackPressed();
+            }
+        });
         // Set OnClickListener for the info button
         ImageButton infoButton = findViewById(R.id.infoButton);
         infoButton.setOnClickListener(v -> {
@@ -128,10 +140,9 @@ public class productInfoActivity extends AppCompatActivity {
 
     private void showColorSchemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Color Scheme for Ingredients Awareness");
-        builder.setMessage("Yellow indicates a low penalty for your skin, orange indicates a medium penalty, and red indicates a strong penalty for your skin. Make informed decisions based on this color scheme.");
-        builder.setPositiveButton("Got it", (dialog, which) -> {
-            // Do nothing, just close the dialog
+        builder.setTitle("Make informed decisions on the ingredients");
+        builder.setPositiveButton("Got it !", (dialog, which) -> {
+            // your code here
         });
         AlertDialog dialog = builder.create();
         dialog.show();

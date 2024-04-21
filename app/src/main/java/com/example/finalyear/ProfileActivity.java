@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private EditText editTextUsername, editTextEmail;
+    private EditText editTextUsername;
     private Button btnLogout, btnSaveChanges, btnChangePassword;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -43,7 +43,6 @@ public class ProfileActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         editTextUsername = findViewById(R.id.editTextUsername);
-        editTextEmail = findViewById(R.id.editTextEmail);
         btnLogout = findViewById(R.id.btnLogout); // Initialize btnLogout
         btnSaveChanges = findViewById(R.id.SaveButton); // Initialize btnSaveChanges
         btnChangePassword = findViewById(R.id.btnChangePassword); // Initialize btnChangePassword
@@ -65,16 +64,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Get the updated values from EditText fields
                 String newUsername = editTextUsername.getText().toString();
-                String newEmail = editTextEmail.getText().toString();
 
                 // Check if the new username is different from the current one
                 if (!newUsername.equals(currentUser.getDisplayName())) {
                     changeUsername(newUsername);
-                }
-
-                // Check if the new email is different from the current one
-                if (!newEmail.equals(currentUser.getEmail())) {
-                    changeEmail(newEmail);
                 }
             }
         });
@@ -99,10 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             String username = document.getString("username");
-                            String email = document.getString("email");
-
                             editTextUsername.setText(username);
-                            editTextEmail.setText(email);
                         }
                     }
                 }
@@ -140,33 +130,6 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void changeEmail(String newEmail) {
-        currentUser.updateEmail(newEmail)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Update email in Firestore
-                            DocumentReference userRef = mFirestore.collection("Users").document(currentUser.getUid());
-                            userRef.update("email", newEmail)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(ProfileActivity.this, "Email updated successfully", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(ProfileActivity.this, "Failed to update email in Firestore", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                        } else {
-                            Toast.makeText(ProfileActivity.this, "Failed to update email", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    // Inside changePassword method
 
     private void changePassword(String newPassword) {
         currentUser.updatePassword(newPassword)

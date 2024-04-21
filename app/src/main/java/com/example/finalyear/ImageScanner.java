@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.Manifest;
-
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -242,7 +242,18 @@ public class ImageScanner extends AppCompatActivity {
             imageUri = data.getData();
 
             try {
-                Picasso.get().load(imageUri).into(imageView);
+                // Get the screen dimensions
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int screenWidth = displayMetrics.widthPixels;
+                int screenHeight = displayMetrics.heightPixels;
+
+                // Calculate maximum dimensions based on screen size
+                int maxWidth = (int) (screenWidth * 0.8); // 80% of screen width
+                int maxHeight = (int) (screenHeight * 0.8); // 80% of screen height
+
+                // Load the image into the image view with the calculated dimensions
+                Picasso.get().load(imageUri).resize(maxWidth, maxHeight).centerInside().into(imageView);
             } catch (Exception e) {
                 e.printStackTrace();
             }
