@@ -46,8 +46,10 @@ public class ScannerActivity extends AppCompatActivity {
     private MaterialButton cameraBtn;
     private MaterialButton galleryBtn;
     private ImageView imageIv;
+
+    ImageButton backButton ;
     private MaterialButton scanBtn;
-    private TextView resultTv;
+
 
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 101;
@@ -66,12 +68,15 @@ public class ScannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scanner_activity);
-
+        backButton = findViewById(R.id.backButton);
         cameraBtn = findViewById(R.id.cameraBtn);
         galleryBtn = findViewById(R.id.galleryBtn);
         imageIv = findViewById(R.id.imageIv);
         scanBtn = findViewById(R.id.scanIv);
-        resultTv = findViewById(R.id.resultTv);
+       //resultTv = findViewById(R.id.resultTv);
+
+
+        ImageButton backButton = findViewById(R.id.backButton);
 
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -80,7 +85,6 @@ public class ScannerActivity extends AppCompatActivity {
                 .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
                 .build();
         barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions);
-        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +186,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: password:" + password);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: encryptionType:" + encryptionType);
 
-                    resultTv.setText("TYPE: TYPE_WIFI \nssid " + ssid + "\npassword:" + password + "\nencryptionType" + encryptionType + "\nraw value:" + rawValue);
+                    //resultTv.setText("TYPE: TYPE_WIFI \nssid " + ssid + "\npassword:" + password + "\nencryptionType" + encryptionType + "\nraw value:" + rawValue);
                 }
                 break;
                 case Barcode.TYPE_URL: {
@@ -195,7 +199,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: TITLE " + title);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: url" + url);
 
-                    resultTv.setText("TYPE: TYPE_URL \ntitle:" + title + "\nurl:" + url + "\nraw value:" + rawValue);
+                    //resultTv.setText("TYPE: TYPE_URL \ntitle:" + title + "\nurl:" + url + "\nraw value:" + rawValue);
                 }
                 break;
                 case Barcode.TYPE_EMAIL: {
@@ -210,7 +214,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: body" + body);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: subject" + subject);
 
-                    resultTv.setText("TYPE: TYPE_URL \naddress:" + address + "\nbody:" + body + "\nsubject:" + subject + "\nraw value:" + rawValue);
+                   // resultTv.setText("TYPE: TYPE_URL \naddress:" + address + "\nbody:" + body + "\nsubject:" + subject + "\nraw value:" + rawValue);
 
                 }
                 break;
@@ -229,12 +233,12 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: name" + name);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: phone" + phone);
 
-                    resultTv.setText("TYPE: TYPE_CONTACT_INFO \ntitle:" + title + "\norganizer:" + organizer + "\nname:" + name + "\nphone:" + phone);
+                   // resultTv.setText("TYPE: TYPE_CONTACT_INFO \ntitle:" + title + "\norganizer:" + organizer + "\nname:" + name + "\nphone:" + phone);
 
                 }
                 break;
                 default:{
-                    resultTv.setText("raw value:" + rawValue);
+                    //resultTv.setText("raw value:" + rawValue);
                 }
             }
         }

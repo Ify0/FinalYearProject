@@ -749,7 +749,7 @@ public class RoutineActivity extends AppCompatActivity {
         // Create AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView)
-                .setTitle("Enter Email Address")
+                .setTitle("Receive Your Personalized Skincare Routine Today!")
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -766,7 +766,7 @@ public class RoutineActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             // Display error message if email is empty
-                            Toast.makeText(getApplicationContext(), "Please enter an email address", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Please enter an email address ", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })

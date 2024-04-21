@@ -101,10 +101,14 @@ public class ActivityDetail extends AppCompatActivity {
 
     private void showColorSchemeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityDetail.this);
-        builder.setTitle("Color Scheme for Ingredients Awareness");
-        builder.setMessage("Yellow indicates a low penalty for your skin, orange indicates a medium penalty, and red indicates a strong penalty for your skin. Make informed decisions based on this color scheme.");
-        builder.setPositiveButton("Got it", (dialog, which) -> {
-            // Do nothing, just close the dialog
+        builder.setTitle("Ingredients Awareness: Color Scheme");
+        builder.setMessage(
+                "Yellow: Low Warning - The ingredients have a minimal impact on your skin.\n\n" +
+                "Orange: Medium Warning - The ingredients could have a moderate impact on your skin.\n\n" +
+                "Red: High Warning - The ingredients can cause significant impact to your skin.\n\n" +
+                "Please use this color scheme to make informed decisions about your skincare.");
+        builder.setPositiveButton("Got it !", (dialog, which) -> {
+            // your code here
         });
         AlertDialog dialog = builder.create();
         dialog.show();

@@ -27,9 +27,9 @@
 
         <TextView
             android:id="@+id/recTitle"
-            android:layout_width="282dp"
-            android:layout_height="78dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="273dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/recImage"
             android:text="Product Name"
@@ -39,9 +39,9 @@
         <TextView
             android:id="@+id/recDesc"
             android:layout_width="277dp"
-            android:layout_height="wrap_content"
+            android:layout_height="29dp"
             android:layout_below="@id/recTitle"
-            android:layout_marginStart="22dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="0.5dp"
             android:layout_marginBottom="12dp"
             android:layout_toEndOf="@id/recImage"
@@ -52,12 +52,11 @@
 
         <CheckBox
             android:id="@+id/favouritescheckBox"
-            android:layout_width="64dp"
-            android:layout_height="31dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/recDesc"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0.5dp"
-            android:layout_marginEnd="2dp"
             android:button="@drawable/favorites" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
