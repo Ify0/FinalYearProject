@@ -181,16 +181,18 @@ import com.google.firebase.storage.StorageReference;
                 });
     }
 
-    private String extractPredictedClass(String analysisResult) {
-        // Extracting the predicted class value from the analysis result string
-        // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
-        String[] parts = analysisResult.split("Predicted Class: ");
-        if (parts.length > 1) {
-            return parts[1].split(",")[0].trim();
+        private String extractPredictedClass(String analysisResult) {
+            // Extracting the predicted class value from the analysis result string
+            // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
+            String[] parts = analysisResult.split("Predicted Class: ");
+            if (parts.length > 1) {
+                String predictedClass = parts[1].split(",")[0].trim();
+                // Replace "_" with a space
+                predictedClass = predictedClass.replace("_", " ");
+                return predictedClass;
+            }
+            return "";
         }
-        return "";
-    }
-
     private String extractConfidenceClass(String analysisResult) {
         // Extracting the predicted class value from the analysis result string
         // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
