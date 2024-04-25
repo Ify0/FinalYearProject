@@ -60,8 +60,8 @@ public class TrackerActivity extends AppCompatActivity {
         skinConditionColors.put("pimples", Color.GREEN);
         skinConditionColors.put("fine_lines", Color.BLUE);
         skinConditionColors.put("wrinkles", Color.YELLOW);
-        skinConditionColors.put("enlarged_pores", Color.parseColor("#FF00FF")); // Magenta
-        skinConditionColors.put("dark_circles", Color.parseColor("#00FFFF"));
+        skinConditionColors.put("enlarged_pores", Color.parseColor("#A52A2A"));
+        skinConditionColors.put("dark_circles", Color.parseColor("#FFA500"));
 
         retrieveAnalysisResult();
 
@@ -85,8 +85,8 @@ public class TrackerActivity extends AppCompatActivity {
                                 "Green - Pimples\n" +
                                 "Blue - Fine Lines\n" +
                                 "Yellow - Wrinkles\n" +
-                                "Orange - Enlarged Pores\n" +
-                                "Purple - Dark Circles")
+                                "Brown - Enlarged Pores\n" +
+                                "Orange- Dark Circles")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Dismiss the dialog when the positive button is clicked
@@ -156,6 +156,8 @@ public class TrackerActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setGranularity(1f); // Adjust granularity as needed
         xAxis.setValueFormatter(new IndexAxisValueFormatter(xValues));
+        xAxis.setSpaceMin(0.5f); // Add space before first bar
+        xAxis.setSpaceMax(0.5f); // Add space after last bar
 
         YAxis yAxis = barChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
@@ -169,8 +171,6 @@ public class TrackerActivity extends AppCompatActivity {
 
         // Add label at the top of the left Y-axis
         yAxis.setDrawTopYLabelEntry(true);
-        yAxis.setDrawTopYLabelEntry(true);
-
 
         Legend legend = barChart.getLegend();
         legend.setEnabled(false);
@@ -181,11 +181,13 @@ public class TrackerActivity extends AppCompatActivity {
         dataSet.setValueTextSize(0f); // Hide values on bars
 
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(1f); // Increase bar width for aesthetics
+        barData.setBarWidth(0.8f); // Adjust bar width
 
         barChart.setData(barData);
         barChart.invalidate();
     }
+
+
 
 
     private float extractConfidenceClass(String analysisResult) {
