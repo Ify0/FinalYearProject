@@ -18,7 +18,7 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_activity); // Replace with your layout file
+        setContentView(R.layout.menu_activity);
 
 
         skinReader = findViewById(R.id.skinReader);

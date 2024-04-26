@@ -73,7 +73,7 @@ public class ScannerActivity extends AppCompatActivity {
         galleryBtn = findViewById(R.id.galleryBtn);
         imageIv = findViewById(R.id.imageIv);
         scanBtn = findViewById(R.id.scanIv);
-       //resultTv = findViewById(R.id.resultTv);
+
 
 
         ImageButton backButton = findViewById(R.id.backButton);
@@ -186,7 +186,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: password:" + password);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: encryptionType:" + encryptionType);
 
-                    //resultTv.setText("TYPE: TYPE_WIFI \nssid " + ssid + "\npassword:" + password + "\nencryptionType" + encryptionType + "\nraw value:" + rawValue);
+
                 }
                 break;
                 case Barcode.TYPE_URL: {
@@ -199,7 +199,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: TITLE " + title);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: url" + url);
 
-                    //resultTv.setText("TYPE: TYPE_URL \ntitle:" + title + "\nurl:" + url + "\nraw value:" + rawValue);
+
                 }
                 break;
                 case Barcode.TYPE_EMAIL: {
@@ -214,7 +214,7 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: body" + body);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: subject" + subject);
 
-                   // resultTv.setText("TYPE: TYPE_URL \naddress:" + address + "\nbody:" + body + "\nsubject:" + subject + "\nraw value:" + rawValue);
+
 
                 }
                 break;
@@ -233,12 +233,12 @@ public class ScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "extractBarCodeQRCodeInfo: name" + name);
                     Log.d(TAG, "extractBarCodeQRCodeInfo: phone" + phone);
 
-                   // resultTv.setText("TYPE: TYPE_CONTACT_INFO \ntitle:" + title + "\norganizer:" + organizer + "\nname:" + name + "\nphone:" + phone);
+
 
                 }
                 break;
                 default:{
-                    //resultTv.setText("raw value:" + rawValue);
+
                 }
             }
         }
@@ -295,30 +295,6 @@ public class ScannerActivity extends AppCompatActivity {
                 }
             }
     );
-
-    private boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-        return result;
-    }
-
-    private void requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
-    }
-
-  /*  private boolean checkCameraPermission() {
-        boolean resultCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED;
-        boolean resultsStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-        return resultCamera && resultsStorage;
-    }
-    *
-   */
-
-    private void requestCameraPermission() {
-        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

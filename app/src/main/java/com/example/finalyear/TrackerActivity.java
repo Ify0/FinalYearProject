@@ -3,7 +3,6 @@ package com.example.finalyear;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,7 +17,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +46,7 @@ public class TrackerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tracker);
-         yAxisLabelTextView = findViewById(R.id.yAxisLabelTextView);
+        yAxisLabelTextView = findViewById(R.id.yAxisLabelTextView);
 // Further customization if needed
 
         barChart = findViewById(R.id.barChart);
@@ -106,9 +104,9 @@ public class TrackerActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<BarEntry> entries = new ArrayList<>();
                         xValues = new ArrayList<>();
                         dateToPredictedClass = new HashMap<>();
+                        HashMap<String, Float> dateToConfidence = new HashMap<>();
 
                         for (DocumentSnapshot document : task.getResult()) {
                             String analysisResult = document.getString("analysisResult");
@@ -121,9 +119,7 @@ public class TrackerActivity extends AppCompatActivity {
                             xValues.add(formattedDate);
 
                             dateToPredictedClass.put(formattedDate, predictedClass);
-
-                            int xIndex = xValues.indexOf(formattedDate);
-                            entries.add(new BarEntry(xIndex, confidence));
+                            dateToConfidence.put(formattedDate, confidence);
                         }
 
                         // Sort xValues in chronological order
@@ -143,12 +139,30 @@ public class TrackerActivity extends AppCompatActivity {
                             }
                         });
 
+                        // Now that xValues are sorted, create the entries list
+                        List<BarEntry> entries = new ArrayList<>();
+                        for (int i = 0; i < xValues.size(); i++) {
+                            String date = xValues.get(i);
+                            float confidence = dateToConfidence.get(date);
+                            entries.add(new BarEntry(i, confidence));
+                        }
+
                         setupBarChart(entries);
                     } else {
                         // Handle error
                     }
                 });
     }
+
+    private int findEntryIndexForDate(String date) {
+        for (int i = 0; i < xValues.size(); i++) {
+            if (xValues.get(i).equals(date)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
 
     private void setupBarChart(List<BarEntry> entries) {

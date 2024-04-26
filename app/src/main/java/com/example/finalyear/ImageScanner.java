@@ -89,11 +89,11 @@ public class ImageScanner extends AppCompatActivity {
         Button useCameraButton = findViewById(R.id.cameraBtn);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
-        // Inside onCreate
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference("uploads"); // "uploads" is the name of your storage folder
 
-        // Set click listeners
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference("uploads");
+
+
         uploadButton.setOnClickListener(view -> openFileChooser());
 
         useCameraButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,7 @@ public class ImageScanner extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle back button click event
+
                 onBackPressed();
             }
         });
@@ -207,7 +207,7 @@ public class ImageScanner extends AppCompatActivity {
                 imageCapture
         );
 
-        // Set up image capture listener
+
     }
 
     private void showLoadingLayout() {
@@ -300,7 +300,7 @@ public class ImageScanner extends AppCompatActivity {
                     saveToFirebase(imageUrl, errorMessage, timestamp)
                             .addOnSuccessListener(documentReference -> {
                                 Log.d(TAG, "Upload successful");
-                                // Start next activity even if analysis failed, but result (error message) has been saved to Firestore
+
                                 Intent intent = new Intent(ImageScanner.this, ResultsActivity.class);
                                 startActivity(intent);
                             })
@@ -317,7 +317,7 @@ public class ImageScanner extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             // This method will be called after doInBackground completes
-            hideLoadingLayout(); // Add this line to hide loading layout after analysis
+            hideLoadingLayout();
         }
     }
 

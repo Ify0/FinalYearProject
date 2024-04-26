@@ -7,7 +7,7 @@ public class Upload {
     private String analysisResult;
 
     private Timestamp timestamp;
-    // Default constructor required for calls to DataSnapshot.getValue(Upload.class)
+
     public Upload() {
     }
 

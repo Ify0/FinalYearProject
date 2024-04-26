@@ -1,6 +1,6 @@
 package com.example.finalyear;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import com.google.firebase.storage.StorageReference;
 
     public class ResultsActivity extends AppCompatActivity {
 
-        private static final String TAG = "ResultsActivity"; // Added TAG declaration
+        private static final String TAG = "ResultsActivity";
         private ImageView resultImageView;
         private TextView mainPriorityValueTextView;
         private TextView likelyTextView;
@@ -81,8 +81,6 @@ import com.google.firebase.storage.StorageReference;
             retrieveMainPriorityValue();
         }
 
-        // Remaining methods are unchanged
-        // ...
 
     private void retrieveImage() {
         // Firestore reference for the user's dynamically changing image path
@@ -148,7 +146,7 @@ import com.google.firebase.storage.StorageReference;
                             mainPriorityValueTextView.setText(predictedClass);
                             likelyTextView.setText(confidence);
 
-                            // Assuming there's only one analysis result, break after the first iteration
+
                             break;
                         }
                     }
@@ -182,20 +180,18 @@ import com.google.firebase.storage.StorageReference;
     }
 
         private String extractPredictedClass(String analysisResult) {
-            // Extracting the predicted class value from the analysis result string
-            // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
+
             String[] parts = analysisResult.split("Predicted Class: ");
             if (parts.length > 1) {
                 String predictedClass = parts[1].split(",")[0].trim();
-                // Replace "_" with a space
+
                 predictedClass = predictedClass.replace("_", " ");
                 return predictedClass;
             }
             return "";
         }
     private String extractConfidenceClass(String analysisResult) {
-        // Extracting the predicted class value from the analysis result string
-        // This is a simple example. You may need to implement a proper parsing logic based on your actual data structure.
+
         String[] parts = analysisResult.split("Confidence: ");
         if (parts.length > 1) {
             String predictedValueStr = parts[1].split(",")[0].trim();
@@ -210,11 +206,11 @@ import com.google.firebase.storage.StorageReference;
                 } else if (predictedValue > 0.0) {
                     return "Likely";
                 } else {
-                    // Add any additional conditions as needed
+
                     return "Unknown";
                 }
             } catch (NumberFormatException ex) {
-                // Handle non-numeric values, e.g., "hyperpigmentation"
+
                 return "Unknown";
             }
         }

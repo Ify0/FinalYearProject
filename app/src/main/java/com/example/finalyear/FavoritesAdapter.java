@@ -1,7 +1,7 @@
 package com.example.finalyear;
 
-// FavoritesAdapter.java
-import android.app.Activity;
+
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -85,28 +85,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavouriteViewHolder> 
         return favoritesList.size();
     }
 
-    public void searchDataList(List<SkincareProduct> searchList) {
-        favoritesList = searchList;
-        notifyDataSetChanged();
-    }
 
-    private void addToFavorites(SkincareProduct product) {
-        // Create a new document in the "favourites" collection under the user's UID
-        db.collection("Users")
-                .document(currentUser.getUid())
-                .collection("favourites")
-                .document(product.getProduct_name()) // Assuming there is a unique identifier for each product
-                .set(product) // You can customize this based on your data structure
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Successfully added to favorites
-                        Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Handle failure
-                        Toast.makeText(context, "Failed to add to Favorites", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+
 
     public void removeFromFavorites(SkincareProduct product) {
         int position = favoritesList.indexOf(product);
@@ -134,16 +114,6 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavouriteViewHolder> 
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvProductName;
-        // Add more views as needed
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvProductName = itemView.findViewById(R.id.recTitle);
-            // Initialize more views as needed
-        }
-
-    }
 }
 

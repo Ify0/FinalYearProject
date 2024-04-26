@@ -1,6 +1,6 @@
 package com.example.finalyear;
 
-// ProductInfoActivity.java
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +25,7 @@ import java.util.List;
 public class productInfoActivity extends AppCompatActivity {
     private SkincareProduct skincareProduct;
     private TextView productNameTv, ingredientsTv, brands;
-    private RecyclerView recyclerView; // Declare RecyclerView
+    private RecyclerView recyclerView;
 
     ImageButton backButton ;
     private FirebaseFirestore db;
@@ -67,16 +67,9 @@ public class productInfoActivity extends AppCompatActivity {
         List<String> ingredientsList = Arrays.asList(intent.getStringExtra("INGREDIENTS"));
        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
        recyclerView.setLayoutManager(layoutManager);
-       //ParsedExtraAdapter adapter = new ParsedExtraAdapter(skincareProduct.get__parsed_extra());
-       //recyclerView.setAdapter(adapter);
 
-        // Set up RecyclerView for parsed extra
-        //LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        //recyclerView.setLayoutManager(layoutManager);
         ParsedExtraAdapter adapter = new ParsedExtraAdapter(ingredientsList);
-        //binding.detailParsedExtra.setAdapter(adapter);
-        // Initialize ParsedExtraAdapter with parsed extra list
-        //ParsedExtraAdapter adapter = new ParsedExtraAdapter(parsedExtra);
+
         recyclerView.setAdapter(adapter);
 
         // Add an OnCheckedChangeListener to the CheckBox

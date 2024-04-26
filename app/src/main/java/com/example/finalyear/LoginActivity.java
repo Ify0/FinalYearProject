@@ -30,14 +30,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        usernameField = findViewById(R.id.username); // Assuming your EditText id for username is username
+        usernameField = findViewById(R.id.username);
         passwordField = findViewById(R.id.password);
-        loginButton = findViewById(R.id.button); // Assuming your login button id is button
+        loginButton = findViewById(R.id.button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username = usernameField.getText().toString(); // Get the username entered by the user
+                final String username = usernameField.getText().toString();
                 String password = passwordField.getText().toString();
 
                 // Query Firestore to find the user document with the given username
@@ -72,11 +72,11 @@ public class LoginActivity extends AppCompatActivity {
                                                     }
                                                 });
                                     } else {
-                                        // If no document with the given username exists
+
                                         Toast.makeText(LoginActivity.this, "Username not found.", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    // If the query to Firestore fails
+
                                     Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
