@@ -58,7 +58,7 @@ public class TrackerActivity extends AppCompatActivity {
         skinConditionColors.put("pimples", Color.GREEN);
         skinConditionColors.put("fine_lines", Color.BLUE);
         skinConditionColors.put("wrinkles", Color.YELLOW);
-        skinConditionColors.put("enlarged_pores", Color.parseColor("#A52A2A"));
+        skinConditionColors.put("enlarged_pores", Color.parseColor("#964B00"));
         skinConditionColors.put("dark_circles", Color.parseColor("#FFA500"));
 
         retrieveAnalysisResult();
