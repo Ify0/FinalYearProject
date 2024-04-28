@@ -491,8 +491,6 @@ public class ParsedExtraAdapter extends RecyclerView.Adapter<ParsedExtraAdapter.
         mapping.put("HEXANAL", YELLOW_COLOR);
         mapping.put("HEXETIDINE", YELLOW_COLOR);
 
-
-        // Add more mappings as needed
         return mapping;
     }
 

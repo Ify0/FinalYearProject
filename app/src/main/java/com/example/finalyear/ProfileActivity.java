@@ -43,11 +43,11 @@ public class ProfileActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         editTextUsername = findViewById(R.id.editTextUsername);
-        btnLogout = findViewById(R.id.btnLogout); // Initialize btnLogout
-        btnSaveChanges = findViewById(R.id.SaveButton); // Initialize btnSaveChanges
-        btnChangePassword = findViewById(R.id.btnChangePassword); // Initialize btnChangePassword
+        btnLogout = findViewById(R.id.btnLogout);
+        btnSaveChanges = findViewById(R.id.SaveButton);
+        btnChangePassword = findViewById(R.id.btnChangePassword);
 
-        // Load user details
+
         loadUserDetails();
 
         // Set onClickListener for logout button
@@ -166,9 +166,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAuth.signOut();
-                // Redirect to login or any other desired action after logout
-                // For example:
-                // startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+
                 finishAffinity();  // Finish the current activity
 
             }

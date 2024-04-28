@@ -58,6 +58,17 @@
         </RadioGroup>
 
 
+        <TextView
+            android:id="@+id/main_concern_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radioGroup"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="16dp"
+            android:text="Choose your main concern:"
+            android:textSize="20sp" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"

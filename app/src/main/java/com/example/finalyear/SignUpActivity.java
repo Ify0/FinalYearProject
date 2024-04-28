@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 public class SignUpActivity extends AppCompatActivity {
-    // Initialize Firebase Authentication and Firestore
+
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
 
@@ -38,7 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.signup_activity);
 
         signUpButton = findViewById(R.id.button);
-        username = findViewById(R.id.username); // Initialize the username EditText
+        username = findViewById(R.id.username);
         email = findViewById(R.id.email);
         password = findViewById(R.id.password1);
         confirmPassword = findViewById(R.id.password2);
@@ -47,7 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String username1 = username.getText().toString(); // Get the username entered by the user
+                final String username1 = username.getText().toString();
                 final String email1 = email.getText().toString();
                 final String password1 = password.getText().toString();
                 String confirmPassword1 = confirmPassword.getText().toString();

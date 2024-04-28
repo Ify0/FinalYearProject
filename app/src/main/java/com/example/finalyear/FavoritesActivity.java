@@ -1,6 +1,6 @@
 package com.example.finalyear;
 
-// FavoritesActivity.java
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;

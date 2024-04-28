@@ -49,7 +49,7 @@ public class ImageAnalyzer {
                         JsonNode predictionsNode = jsonNode.get("predictions");
 
                         if (predictionsNode != null && predictionsNode.isArray() && predictionsNode.size() > 0) {
-                            JsonNode prediction = predictionsNode.get(0); // Assuming only one prediction for simplicity
+                            JsonNode prediction = predictionsNode.get(0);
                             String predictedClass = prediction.get("class").asText();
                             double confidence = prediction.get("confidence").asDouble();
 

@@ -67,8 +67,8 @@ public class SkinReader extends AppCompatActivity {
             public void onClick(View view) {
                 showLoadingLayout();
                 saveDataToFirestore();
-                //Intent intent = new Intent(SkinReader.this, ImageScanner.class);
-                //startActivity(intent);
+
+
 
             }
         });

@@ -66,14 +66,12 @@ public class MyAdapter extends RecyclerView.Adapter<myViewHolder> {
                 if (pos != RecyclerView.NO_POSITION) {
                     SkincareProduct selectedProduct = dataList.get(pos);
 
-                    // Perform actions when the favorite status changes
+
                     if (isChecked) {
-                        // Add the product to Firebase or your favorites list
-                        // You might want to create a method to handle Firebase operations
+
                         addToFavorites(selectedProduct);
                     } else {
-                        // Remove the product from Firebase or your favorites list
-                        // You might want to create a method to handle Firebase operations
+
                         removeFromFavorites(selectedProduct);
                     }
                 }
@@ -97,26 +95,24 @@ public class MyAdapter extends RecyclerView.Adapter<myViewHolder> {
         db.collection("Users")
                 .document(currentUser.getUid())
                 .collection("favourites")
-                .document(product.getProduct_name()) // Assuming there is a unique identifier for each product
-                .set(product) // You can customize this based on your data structure
+                .document(product.getProduct_name())
+                .set(product)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Successfully added to favorites
+
                         Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show();
                     } else {
-                        // Handle failure
+
                         Toast.makeText(context, "Failed to add to Favorites", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void removeFromFavorites(SkincareProduct product) {
-        // Get a reference to the document in the "favourites" collection
-        // Replace "currentUser.getUid()" with the actual method or variable you use to get the current user's UID
         db.collection("Users")
                 .document(currentUser.getUid())
                 .collection("favourites")
-                .document(product.getProduct_name()) // Assuming there is a unique identifier for each product
+                .document(product.getProduct_name())
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

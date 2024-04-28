@@ -22,7 +22,7 @@ public class UserPreferences {
         this.combination = combination;
     }
 
-    // Add getters and setters
+
     public String getPriceRange() {
         return priceRange;
     }

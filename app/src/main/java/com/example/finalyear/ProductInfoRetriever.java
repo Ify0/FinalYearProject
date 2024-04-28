@@ -18,7 +18,7 @@ import java.net.URL;
 public class ProductInfoRetriever extends AsyncTask<String, Void, String> {
     private static final String API_BASE_URL = "https://world.openfoodfacts.org/api/v2/product/";
 
-    private Context context; // Added member variable to hold the context
+    private Context context;
 
     public ProductInfoRetriever(Context context) { // Added constructor to receive context
         this.context = context;

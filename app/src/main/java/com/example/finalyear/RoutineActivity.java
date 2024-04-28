@@ -66,7 +66,7 @@ public class RoutineActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private List<Product> filteredProducts;
 
-    private Session session;
+
     private UserPreferences userPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +82,11 @@ public class RoutineActivity extends AppCompatActivity {
         currentUser = auth.getCurrentUser();
 
         if (currentUser != null) {
-            // User is signed in
-            // Retrieve user preferences from Firestore
+
             retrieveUserPreferencesFromFirestore();
            // retrieveAnalysisResult();
         } else {
-            // User is not signed in, handle accordingly
+
             Log.d("Firestore", "User is not signed in.");
         }
         ImageButton backButton = findViewById(R.id.backButton);
@@ -125,7 +124,7 @@ public class RoutineActivity extends AppCompatActivity {
         moistureAdapter = new MoistureAdapter(this, new ArrayList<>());
 
         recyclerViewCleanser.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewTreatment.setLayoutManager(new LinearLayoutManager(this)); // Uncomment this line
+        recyclerViewTreatment.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMoisture.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerViewCleanser.setAdapter(cleanserAdapter);
@@ -398,89 +397,7 @@ public class RoutineActivity extends AppCompatActivity {
 
         });
     }
-  // private void saveToTxtFile(String content, String fileName, String emailAddress, String emailContent) throws IOException {
-  //     try {
-  //         File file = new File(getFilesDir(), fileName);
-  //         FileWriter fileWriter = new FileWriter(file);
-  //         fileWriter.write(content);
-  //         fileWriter.flush();
-  //         fileWriter.close();
-  //         Log.d("File", "File saved at: " + file.getAbsolutePath());
 
-  //         // Upload the file to Firebase Storage
-  //         StorageReference storageRef = storage.getReference().child("files/" + fileName);
-
-  //         try {
-  //             InputStream stream = new ByteArrayInputStream(content.getBytes()); // Convert your text to InputStream
-  //             UploadTask uploadTask = storageRef.putStream(stream);
-
-  //             uploadTask.addOnSuccessListener(taskSnapshot -> {
-  //                 // File uploaded successfully
-  //                 // Get the download URL and pass it to the sendEmailNow method
-  //                 String downloadUrl = getDownloadUrl(taskSnapshot);
-  //                 if (downloadUrl != null) {
-  //                     try {
-  //                         sendEmailNow(emailAddress, emailContent, content); // Pass content for attachment
-  //                     } catch (IOException e) {
-  //                         throw new RuntimeException(e);
-  //                     }
-  //                 } else {
-  //                     // Handle the case where the download URL is not available
-  //                     Log.e("FirebaseStorage", "Download URL is null");
-  //                 }
-  //             }).addOnFailureListener(exception -> {
-  //                 // Handle unsuccessful uploads
-  //                 Log.e("FirebaseStorage", "Error uploading file", exception);
-  //             });
-  //         } catch (Exception e) {
-  //             // Handle exception
-  //             Log.e("FirebaseStorage", "Error converting text to InputStream", e);
-  //         }
-  //     } catch (IOException e) {
-  //         e.printStackTrace();
-  //         Log.e("File", "Error saving file: " + e.getMessage());
-  //         throw e; // Rethrow the IOException
-  //     }
-  // }
-
-
-    private void downloadJsonFile(String filePath, AnalysisResultRoutine result, RecyclerView recyclerView) {
-        StorageReference storageRef = storage.getReference().child(filePath);
-        storageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    Uri downloadUrl = task.getResult();
-                    if (downloadUrl != null) {
-                        new AsyncTask<Void, Void, String>() {
-                            @Override
-                            protected String doInBackground(Void... params) {
-                                try {
-                                    InputStream inputStream = new URL(downloadUrl.toString()).openStream();
-                                    return readStream(inputStream);
-                                } catch (IOException e) {
-                                    return null;
-                                }
-                            }
-
-                            @Override
-                            protected void onPostExecute(String jsonString) {
-                                super.onPostExecute(jsonString);
-                                if (jsonString != null) {
-                                    filteredProducts = parseAndFilterProducts(jsonString, result);
-                                    displayProductsInRecyclerView(filteredProducts, recyclerView);
-                                } else {
-                                    // Handle parsing error
-                                }
-                            }
-                        }.execute();
-                    }
-                } else {
-                    // Handle error
-                }
-            }
-        });
-    }
     private String readStream(InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
@@ -520,35 +437,7 @@ public class RoutineActivity extends AppCompatActivity {
 
         return products;
     }
-    private List<Product> parseAndFilterProducts(String jsonString, AnalysisResultRoutine result) {
-        List<Product> products = new ArrayList<>();
 
-        try {
-            JSONArray jsonArray = new JSONArray(jsonString);
-
-            String[] priceRangeStrings = result.getPriceRange().split("-");
-            double minPrice = Double.parseDouble(priceRangeStrings[0]);
-            double maxPrice = Double.parseDouble(priceRangeStrings[1]);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject productJson = jsonArray.getJSONObject(i);
-
-                String name = productJson.getString("name");
-                double price = productJson.getDouble("price");
-
-                if (price >= minPrice && price <= maxPrice) {
-                    Product product = new Product();
-                    product.setName(name);
-                    product.setPrice(price);
-                    products.add(product);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return products;
-    }
     private void displayProductsInRecyclerView(List<Product> products, RecyclerView recyclerView) {
         if (recyclerView == recyclerViewCleanser) {
             cleanserAdapter.setCleanserList(products);
@@ -561,184 +450,6 @@ public class RoutineActivity extends AppCompatActivity {
             moistureAdapter.notifyDataSetChanged();
         }
     }
- //  private void saveProductsToFirestore(List<Product> products, String userId) {
- //      // Create a new collection in Firestore for storing products
- //      CollectionReference productsCollection = firestore.collection("users").document(userId).collection("products");
-
- //      // Iterate through the list of products and store each product in Firestore
- //      for (Product product : products) {
- //          Map<String, Object> productData = new HashMap<>();
- //          productData.put("name", product.getName());
- //          productData.put("price", product.getPrice());
-
- //          // Generate a unique ID for each product
- //          String productId = UUID.randomUUID().toString();
-
- //          // Store the product data in Firestore with the generated ID
- //          productsCollection.document(productId).set(productData)
- //                  .addOnSuccessListener(new OnSuccessListener<Void>() {
- //                      @Override
- //                      public void onSuccess(Void aVoid) {
- //                          Log.d("Firestore", "Product saved successfully: " + product.getName());
- //                      }
- //                  })
- //                  .addOnFailureListener(new OnFailureListener() {
- //                      @Override
- //                      public void onFailure(@NonNull Exception e) {
- //                          Log.e("Firestore", "Error saving product: " + product.getName(), e);
- //                      }
- //                  });
- //      }
- //  }
-
- //  private void showEmailDialog() {
- //      // Inflate the layout for the dialog
- //      View view = LayoutInflater.from(this).inflate(R.layout.dialog_email_input, null);
-
- //      // Find the email EditText and initialize it
- //      EditText emailEditText = view.findViewById(R.id.emailEditText);
-
- //      // Create the AlertDialog
- //      AlertDialog.Builder builder = new AlertDialog.Builder(this);
- //      builder.setView(view)
- //              .setTitle("Enter Your Email")
- //              .setPositiveButton("Send", new DialogInterface.OnClickListener() {
- //                  @Override
- //                  public void onClick(DialogInterface dialog, int which) {
- //                      String emailAddress = emailEditText.getText().toString().trim();
-
- //                      // Call this after obtaining filtered products in parseAndFilterProducts methods
- //                      saveProductsToFirestore(filteredProducts, currentUser.getUid());
-
- //                      // Store email and contents on Firebase before sending
- //                      storeEmailOnFirebase(emailAddress, filteredProducts);
-
- //                      // Convert filteredProducts to email content string
- //                      String emailContent = convertProductsToEmailContent(filteredProducts);
-
- //                      //sample
- //                      String test = " Testing this";
- //                      // Retrieve the download URL asynchronously
- //                      try {
- //                          sendEmailNow(emailAddress, emailContent, test);
- //                      } catch (IOException e) {
- //                          throw new RuntimeException(e);
- //                      }
- //                  }
- //              });
-
- //      // Show the dialog
- //      AlertDialog dialog = builder.create();
- //      dialog.show();
- //  }
-
- //  // Define an interface for the callback
- //  interface OnDownloadUrlCallback {
- //      void onUrlReady(String downloadUrl);
-
- //      void onUrlError();
- //  }
-
- //  private void storeEmailOnFirebase(String emailAddress, List<Product> products) {
- //      // Create a new document in Firestore for storing email and products
- //      DocumentReference emailDocRef = firestore.collection("emails").document();
-
- //      // Create a Map to store the email and products data
- //      Map<String, Object> emailData = new HashMap<>();
- //      emailData.put("email", emailAddress);
-
- //      // Convert the list of products to a List of Map<String, Object> for Firestore
- //      List<Map<String, Object>> productsData = new ArrayList<>();
- //      for (Product product : products) {
- //          Map<String, Object> productData = new HashMap<>();
- //          productData.put("name", product.getName());
- //          productData.put("price", product.getPrice());
- //          productsData.add(productData);
- //      }
- //      emailData.put("products", productsData);
-
- //      // Store the email and products data in Firestore
- //      emailDocRef.set(emailData)
- //              .addOnSuccessListener(new OnSuccessListener<Void>() {
- //                  @Override
- //                  public void onSuccess(Void aVoid) {
- //                      Log.d("Firestore", "Email and products saved successfully");
- //                  }
- //              })
- //              .addOnFailureListener(new OnFailureListener() {
- //                  @Override
- //                  public void onFailure(@NonNull Exception e) {
- //                      Log.e("Firestore", "Error saving email and products", e);
- //                  }
- //              });
- //  }
-
-
- //  private void sendEmailNow(String emailAddress, String emailContent, String attachmentContent) throws IOException {
- //      // Create a temporary text file and write the content to it
- //      File tempFile = createTempFile("routine", ".txt");
-
- //      try {
- //          FileWriter writer = new FileWriter(tempFile);
- //          writer.write(attachmentContent);
- //          writer.close();
- //      } catch (IOException e) {
- //          e.printStackTrace();
- //      }
-
- //      // Attach the text file to the email
- //      Uri attachmentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + "com.example.finalyear.provider", tempFile);
-
- //      Intent emailIntent = new Intent(Intent.ACTION_SEND);
- //      emailIntent.setType("text/plain");
- //      emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailAddress});
- //      emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Skin Routine Information");
- //      emailIntent.putExtra(Intent.EXTRA_TEXT, emailContent);
- //      emailIntent.putExtra(Intent.EXTRA_STREAM, attachmentUri);
- //      emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
- //      if (emailIntent.resolveActivity(getPackageManager()) != null) {
- //          startActivity(emailIntent);
- //      } else {
- //          Toast.makeText(RoutineActivity.this, "No email client found", Toast.LENGTH_SHORT).show();
- //      }
- //  }
-
-
-
- //  private String convertProductsToEmailContent(List<Product> products) {
- //      StringBuilder emailContentBuilder = new StringBuilder();
- //      for (Product product : products) {
- //          emailContentBuilder.append("Product Name: ").append(product.getName()).append("\n");
- //          emailContentBuilder.append("Product Price: ").append(product.getPrice()).append("\n\n");
- //      }
- //      return emailContentBuilder.toString();
- //  }
-
- //  private String getDownloadUrl(UploadTask.TaskSnapshot taskSnapshot) {
- //      // Assuming the download URL is stored in the taskSnapshot during the upload
- //      Uri downloadUri = taskSnapshot.getUploadSessionUri();
-
- //      if (downloadUri != null) {
- //          return downloadUri.toString();
- //      } else {
- //          // Handle the case where the download URL is not available
- //          return null;
- //      }
- //  }
-
- //   private void showEmailDialog() {
- //       String subject = "Skincare Routine for " + currentUser.getEmail();
- //       String body = getSkincareRoutineEmailBody();
-//
- //       Intent shareIntent = new Intent(Intent.ACTION_SEND);
- //       shareIntent.setType("text/plain");
- //       shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
- //       shareIntent.putExtra(Intent.EXTRA_TEXT, body);
- //       startActivity(Intent.createChooser(shareIntent, "Share with:"));
- //   }
-
-
 
 
     private void showEmailDialog() {

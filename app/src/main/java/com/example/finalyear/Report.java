@@ -18,7 +18,7 @@ public class Report {
     private boolean oily;
     private boolean pimples;
 
-    // Getter and Setter for reportID
+
     public String getReportID() {
         return reportID;
     }
@@ -27,7 +27,7 @@ public class Report {
         this.reportID = reportID;
     }
 
-    // Getter and Setter for range30
+
     public String getPriceRange() {
         return PriceRange;
     }
@@ -36,7 +36,7 @@ public class Report {
         this.PriceRange = PriceRange;
     }
 
-    // Getter and Setter for range50
+
     public String getPriority() {
         return Priority;
     }
@@ -45,7 +45,7 @@ public class Report {
         this.Priority = Priority;
     }
 
-    // Getter and Setter for range100
+
     public int getRange100() {
         return range100;
     }
@@ -54,7 +54,7 @@ public class Report {
         this.range100 = range100;
     }
 
-    // Getter and Setter for combination
+
     public boolean isCombination() {
         return combination;
     }
@@ -63,7 +63,7 @@ public class Report {
         this.combination = combination;
     }
 
-    // Getter and Setter for darkCircles
+
     public boolean isDarkCircles() {
         return darkCircles;
     }
@@ -72,7 +72,7 @@ public class Report {
         this.darkCircles = darkCircles;
     }
 
-    // Getter and Setter for dry
+
     public boolean isDry() {
         return dry;
     }
@@ -81,7 +81,7 @@ public class Report {
         this.dry = dry;
     }
 
-    // Getter and Setter for enlargedPores
+
     public boolean isEnlargedPores() {
         return enlargedPores;
     }
@@ -90,7 +90,6 @@ public class Report {
         this.enlargedPores = enlargedPores;
     }
 
-    // Getter and Setter for fineLines
     public boolean isFineLines() {
         return fineLines;
     }
@@ -99,7 +98,7 @@ public class Report {
         this.fineLines = fineLines;
     }
 
-    // Getter and Setter for hyperpigmentation
+
     public boolean isHyperpigmentation() {
         return hyperpigmentation;
     }
@@ -108,7 +107,7 @@ public class Report {
         this.hyperpigmentation = hyperpigmentation;
     }
 
-    // Getter and Setter for normalSkin
+
     public boolean isNormalSkin() {
         return normalSkin;
     }
@@ -117,7 +116,7 @@ public class Report {
         this.normalSkin = normalSkin;
     }
 
-    // Getter and Setter for oily
+
     public boolean isOily() {
         return oily;
     }
@@ -126,7 +125,7 @@ public class Report {
         this.oily = oily;
     }
 
-    // Getter and Setter for pimples
+
     public boolean isPimples() {
         return pimples;
     }
